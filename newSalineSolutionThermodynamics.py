@@ -35,7 +35,7 @@ class SalineSolution:
         self.c = np.zeros((9, len(self.pH_range)))      # Making an array of zeros with shape=(9, len(self.pH_range)) to store values. Makes a matrix with 9 rows and len(self.pH_range) columns
 
     # Method for calculating the concentration of different species as a function of pH.
-    def distribute_saline_solution_species(self, x, pH):# Method for calculating the distribution of saline species
+    def distribute_saline_solution_species(self, x, pH):# Takes in x and pH as input
         
         '''
         x: Input variable ...?
@@ -81,31 +81,35 @@ class SalineSolution:
         return c                                        # Returns the concentration arra "c" 
 
     # Method for calculating the conservation of saline species as a function of pH
-    def conserve_saline_solution_species(self, x, pH):
-        c = self.distribute_saline_solution_species(x, pH)
+    def conserve_saline_solution_species(self, x, pH):  # takes in x and pH as input
+        c = self.distribute_saline_solution_species(x, pH)# Calls a "distribute_saline_solution_species" for calculating c
 
-        c_Cl = c[0]
-        c_Na = c[1]
-        c_CO3 = c[2]
-        c_HCO3 = c[3]
-        c_H2CO3 = c[4]
-        c_CO2 = c[5]
-        c_NaOH = c[6]
-        c_H = c[7]
-        c_OH = c[8]
+        # Assigning values to entries in c
+        c_Cl = c[0]                                     # First entry in "c" is the concentration Cl' ions              
+        c_Na = c[1]                                     # Second entry in "c" is the concentration Na+ ions
+        c_CO3 = c[2]                                    # Third entry in "c" is the concentration of CO3^2- ions
+        c_HCO3 = c[3]                                   # Fourth entry in "c" is the concentration of HCO3^- ions
+        c_H2CO3 = c[4]                                  # Fifth entry in "c" is the concentration H2CO3
+        c_CO2 = c[5]                                    # Sixth entry in "c" is the concentration of CO2 in water
+        c_NaOH = c[6]                                   # Seventh entry in "c" is the concentration of NaOH complex
+        c_H = c[7]                                      # Eight entry in "c" is the proton concentration
+        c_OH = c[8]                                     # Ninth entry in "c" is the hydroxide concentration
 
-        ClT = c_Cl
-        COXT = c_CO2 + c_CO3 + c_HCO3 + c_H2CO3
-        NaT = c_Na + c_NaOH
+        # Defining total concentrations
+        ClT = c_Cl                                      # Total concentration of Cl-species
+        COXT = c_CO2 + c_CO3 + c_HCO3 + c_H2CO3         # Total concentration of COx-species 
+        NaT = c_Na + c_NaOH                             # Total concentration of Na-species
 
-        results = np.zeros(3)
-        results[0] = ClT - self.c_Clt
-        results[1] = NaT - self.c_Nat
-        results[2] = COXT - self.c_COXt
+        # Defining an array for updating
+        results = np.zeros(3)                           # Empty arry to store the values of the total concentration of Na-, Cl-, and COx-species
+        results[0] = ClT - self.c_Clt                   # Difference between two values of the total concentration of Cl species
+        results[1] = NaT - self.c_Nat                   # Difference between two values of the total concentration of Na species
+        results[2] = COXT - self.c_COXt                 # Difference between two values of the total concentration of COx species
 
-        return results
+        return results                                  # Returns the result as an array of three numbers result = [a, b, c]
 
-    def calculate_concentrations(self):
+    # Method for calculating concentrations
+    def calculate_concentrations(self):                 # Takes in only itself (I think this property is important with object oriented in Python)
         for i in range(len(self.pH_range)):
             c_Cl0, c_Na0, c_CO30 = self.c_Clt, self.c_Nat, self.c_COXt
 
