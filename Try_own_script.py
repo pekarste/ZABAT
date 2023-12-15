@@ -26,24 +26,29 @@ class ChemicalEquilibrium:
         return [eq1, eq2, eq3]
     
 #######################################################################################################################
-    # def soe(self, concentration, pH):
-    #     C_Zn_ion, C_ZnOH3, C_ZnOH4, C_ZnOH, C_Zn_tot = concentration      # Array with the different forms of Zn
+    def soe(self, concentration, pH):
+        C_Zn_ion, C_ZnOH3, C_ZnOH4, C_ZnOH, C_Zn_tot = concentration      # Array with the different forms of Zn
         
-    #     K_ZnOH4 = self.equilibrium_constants['ZnOH4']           # Equilibrium constant for formation or dissolution of Zn(OH)4
-    #     K_ZnOH3 = self.equilibrium_constants['ZnOH3']           # Equilibrium constant for formation or dissolution of Zn(OH)3
-    #     Ksp_ZnOH2 = self.equilibrium_constants['ZnOH2_sat']     # Equilibrium constant for formation or dissolution of Zn(OH)2
-    #     K_ZnOH = self.equilibrium_constants['ZnOH']             # Equilibrium constant for formation or dissolution of ZnOH+
-    #     Ksp_ZnO = self.equilibrium_constants['ZnO']             # Equilibirum constant for formation or dissolution of ZnO
-    #     C_OH = 10**(-14 + pH)                                   # Concentration of Hydroxide 
+        # Equilibrium constants
+        K_ZnOH4 = self.equilibrium_constants['ZnOH4']           # Equilibrium constant for formation or dissolution of Zn(OH)4
+        K_ZnOH3 = self.equilibrium_constants['ZnOH3']           # Equilibrium constant for formation or dissolution of Zn(OH)3
+        Ksp_ZnOH2 = self.equilibrium_constants['ZnOH2_sat']     # Equilibrium constant for formation or dissolution of Zn(OH)2
+        K_ZnOH = self.equilibrium_constants['ZnOH']             # Equilibrium constant for formation or dissolution of ZnOH+
+        Ksp_ZnO = self.equilibrium_constants['ZnO']             # Equilibirum constant for formation or dissolution of ZnO
+        
+        # Concentration of Hydroxide based on pH
+        C_OH = 10**(-14 + pH)                                   # Concentration of Hydroxide 
 
-    #     eq1 = C_Zn_ion*C_OH**4 - K_ZnOH4*C_ZnOH4        # Dissolution/formation of Zn(OH)4
-    #     eq2 = C_Zn_ion*C_OH**3 - K_ZnOH3*C_ZnOH3        # Dissolution/formation of Zn(OH)3
-    #     eq3 = C_Zn_ion*C_OH**2 - Ksp_ZnOH2              # Dissolution/formation of Zn(OH2)
-    #     eq4 = C_Zn_ion*C_OH - K_ZnOH*C_ZnOH             # Dissolution/formation of ZnOH
-    #     eq5 = C_Zn_ion*C_OH**2 - Ksp_ZnO                # Dissolution/formation of ZnO
-    #     eq6 = C_Zn_ion + C_ZnOH4 + C_ZnOH3 + C_ZnOH + C_ZnO + C_ZnOH2 - C_Zn_tot   # The total concentration of Zn species
+        # Equilibria
+        eq1 = C_Zn_ion*C_OH**4 - K_ZnOH4*C_ZnOH4        # Dissolution/formation of Zn(OH)4
+        eq2 = C_Zn_ion*C_OH**3 - K_ZnOH3*C_ZnOH3        # Dissolution/formation of Zn(OH)3
+        eq3 = C_Zn_ion*C_OH**2 - Ksp_ZnOH2              # Dissolution/formation of Zn(OH2)
+        eq4 = C_Zn_ion*C_OH - K_ZnOH*C_ZnOH             # Dissolution/formation of ZnOH
+        eq5 = C_Zn_ion*C_OH**2 - Ksp_ZnO                # Dissolution/formation of ZnO
+        eq6 = C_Zn_ion*C_CO3_2 - K
+        eq = C_Zn_ion + C_ZnOH4 + C_ZnOH3 + C_ZnOH + C_ZnO + C_ZnOH2 - C_Zn_tot   # The total concentration of Zn species
 
-    #     return [eq1, eq2, eq3, eq4, eq5, eq6]
+        return [eq1, eq2, eq3, eq4, eq5, eq6]
 ########################################################################################################################
 
     # Calculating for hydroxide species
@@ -55,7 +60,7 @@ class ChemicalEquilibrium:
 
         for ph in ph_values:
             global total_concentration
-            total_concentration = 10 ** (-13.96 + ph)  # Total concentration of H⁺ and OH⁻ --- Perhaps say -14 + pH or something
+            total_concentration = 10 ** (-13.96 + ph)  # Total concentration of H⁺ and OH⁻ --- Perhaps say -14 + pH or something and this would describe the total concentration of OH-
 
             # Initial guess for concentrations
             initial_guess = [total_concentration / 5, total_concentration / 5, total_concentration / 5]
@@ -98,17 +103,21 @@ c_Zn = equilibrium_constants['ZnO']
 # c_HCO3 = c_H * equilibrium_constants['CO3'] * 10**9.56
 # c_H2CO3 = c_H * c_HCO3 * 10**6.33
 # p_CO2 = c_H2CO3 * 10**(-1.55)
+
 # c_CO3 = equilibrium_constants['K2CO3'] * 10**(-2.0)     # Need to check Ksp or Keq
 # c_ZnCO3 = c_Zn * c_CO3 * 10**(-10)
+
 # c_HF = c_H * c_F * 10**3.3
 # c_HF2 = c_HF * c_F * 10**0.86
 # c_ZnF+ = c_Zn * c_F- * 10**0.8
+
 # c_ZnO = c_Zn * c_OH**2 * 10**(-15.96)   # Change to ZnO_sat
 # c_ZnOH+ = c_Zn * c_OH * 10**5
 # c_ZnOH2_sat = c_Zn * c_OH**2 * 10**(-14.82)
 # c_ZnOH2_aq = c_Zn * c_OH**2 * 10**8.3
 # c_ZnOH3 = c_Zn * c_OH**3 * 10**13.7
 # c_ZnOH4 = c_Zn * c_OH**4 * 10**18
+
 # c_H2O = c_H * c_OH * 10**4.18
 # c_KOH = c_K * c_OH * 10**(-0.2)   Need to check this!
 # KF = K+ + F-
