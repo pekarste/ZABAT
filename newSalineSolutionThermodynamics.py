@@ -110,17 +110,18 @@ class SalineSolution:
 
     # Method for calculating concentrations
     def calculate_concentrations(self):                 # Takes in only itself (I think this property is important with object oriented in Python)
-        for i in range(len(self.pH_range)):
-            c_Cl0, c_Na0, c_CO30 = self.c_Clt, self.c_Nat, self.c_COXt
+        for i in range(len(self.pH_range)):             # Initialises a for-loop iterating for the length of self.pH_range
+            c_Cl0, c_Na0, c_CO30 = self.c_Clt, self.c_Nat, self.c_COXt # Start concentrations of Cl-, Na+, and CO3^2- is called from the class
 
-            x0 = np.array([c_Cl0, c_Na0, c_CO30])
-            options = {'maxfev': 10000}
-            x = fsolve(lambda x: self.conserve_saline_solution_species(x, self.pH_range[i]), x0, **options)
+            x0 = np.array([c_Cl0, c_Na0, c_CO30])       # Starting estimate for the roots of the function fsolve calls
+            options = {'maxfev': 10000}                 # Some kind of options i don't understand what is doing
+            x = fsolve(lambda x: self.conserve_saline_solution_species(x, self.pH_range[i]), x0, **options) # Calling fsolve with the function ebing the method "conserve_saline_solution_species"
 
-            self.c[:, i] = self.distribute_saline_solution_species(x, self.pH_range[i])
-
-    def plot_species_distribution(self):
-        ind = np.where((self.c[5, :] - self.c_CO2_sat) > 0)[0]
+            self.c[:, i] = self.distribute_saline_solution_species(x, self.pH_range[i])# Matrix with 9 rows and len(self.pH_range) columns. Fills the column with the solutions for the concen trations from fsolve
+    
+    # Method for plotting the species distribution
+    def plot_species_distribution(self):                # takes in the class       
+        ind = np.where((self.c[5, :] - self.c_CO2_sat) > 0)[0]# 
         sat_pH = self.pH_range[ind[-1]]
         y_sat = [np.min(self.c[5, :]), np.max(self.c[5, :])]
 
