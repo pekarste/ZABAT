@@ -62,7 +62,7 @@ class Zn_solution:
         K_HCO3_1 = self.equilibrium_constants['HCO3']
 
         K_K2CO3 = self.equilibrium_constants['K2CO3']   #- Missing -- K2CO3 gives intial conditions
-        K_ZnCO3 = self-equilibrium_constants['ZnCO3']   #- Missing
+        K_ZnCO3 = self.equilibrium_constants['ZnCO3']   #- Missing
 
         K_HF2 = self.equilibrium_constants['HF2']
         K_HF = self.equilibrium_constants['HF']
