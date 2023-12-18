@@ -26,29 +26,66 @@ class ChemicalEquilibrium:
         return [eq1, eq2, eq3]
     
 #######################################################################################################################
-    def soe(self, concentration, pH):
-        C_Zn_ion, C_ZnOH3, C_ZnOH4, C_ZnOH, C_Zn_tot = concentration      # Array with the different forms of Zn
+    # def soe(self, concentration, pH):
+    #     C_Zn_2, C_ZnOH3, C_ZnOH4, C_ZnOH, C_Zn_tot = concentration      # Array with the different forms of Zn
         
-        # Equilibrium constants
-        K_ZnOH4 = self.equilibrium_constants['ZnOH4']           # Equilibrium constant for formation or dissolution of Zn(OH)4
-        K_ZnOH3 = self.equilibrium_constants['ZnOH3']           # Equilibrium constant for formation or dissolution of Zn(OH)3
-        Ksp_ZnOH2 = self.equilibrium_constants['ZnOH2_sat']     # Equilibrium constant for formation or dissolution of Zn(OH)2
-        K_ZnOH = self.equilibrium_constants['ZnOH']             # Equilibrium constant for formation or dissolution of ZnOH+
-        Ksp_ZnO = self.equilibrium_constants['ZnO']             # Equilibirum constant for formation or dissolution of ZnO
+    #     # Equilibrium constants
         
-        # Concentration of Hydroxide based on pH
-        C_OH = 10**(-14 + pH)                                   # Concentration of Hydroxide 
+    #     K_CO2 = self.equilibrium_constants['pCO2']
+    #     K_H2CO3 = self.equilibrium_constants['H2CO3']
+    #     K_HCO3_1 = self.equilibrium_constants['HCO3']
 
-        # Equilibria
-        eq1 = C_Zn_ion*C_OH**4 - K_ZnOH4*C_ZnOH4        # Dissolution/formation of Zn(OH)4
-        eq2 = C_Zn_ion*C_OH**3 - K_ZnOH3*C_ZnOH3        # Dissolution/formation of Zn(OH)3
-        eq3 = C_Zn_ion*C_OH**2 - Ksp_ZnOH2              # Dissolution/formation of Zn(OH2)
-        eq4 = C_Zn_ion*C_OH - K_ZnOH*C_ZnOH             # Dissolution/formation of ZnOH
-        eq5 = C_Zn_ion*C_OH**2 - Ksp_ZnO                # Dissolution/formation of ZnO
-        eq6 = C_Zn_ion*C_CO3_2 - K
-        eq = C_Zn_ion + C_ZnOH4 + C_ZnOH3 + C_ZnOH + C_ZnO + C_ZnOH2 - C_Zn_tot   # The total concentration of Zn species
+    #     K_K2CO3 = self.equilibrium_constants['K2CO3']   #- Missing
+    #     K_ZnCO3 = self-equilibrium_constants['ZnCO3']   #- Missing
 
-        return [eq1, eq2, eq3, eq4, eq5, eq6]
+    #     K_HF2 = self.equilibrium_constants['HF2']
+    #     K_HF = self.equilibrium_constants['HF']
+    #     K_ZnF_1 = self.equilibrium_constants['ZnF']
+
+    #     K_ZnOH4 = self.equilibrium_constants['ZnOH4']           # Equilibrium constant for formation or dissolution of Zn(OH)4
+    #     K_ZnOH3 = self.equilibrium_constants['ZnOH3']           # Equilibrium constant for formation or dissolution of Zn(OH)3
+    #     Ksp_ZnOH2 = self.equilibrium_constants['ZnOH2_sat']     # Equilibrium constant for formation or dissolution of Zn(OH)2
+    #     K_ZnOH = self.equilibrium_constants['ZnOH']             # Equilibrium constant for formation or dissolution of ZnOH+
+    #     Ksp_ZnO = self.equilibrium_constants['ZnO']             # Equilibirum constant for formation or dissolution of ZnO
+        
+    #     # Concentration of protons and hydroxide based on pH
+    #     C_H = 10**pH                                    # Concentration of protons
+    #     C_OH = 10**(-14 + pH)                           # Concentration of Hydroxide 
+
+    #     ## Equilibria
+        
+    #     # Carbon acid in water
+    #     eq1 = C_H2CO3 - P_CO2*K_CO2                      # Formation/dissolution of H2CO3
+    #     eq2 = C_HCO3_1*C_H - C_H2CO3*K_H2CO3             # Formation of HCO3^-1 from H2CO3 
+    #     eq3 = C_CO3_2*C_H - C_HCO3_1*K_HCO3_1            # Formation of CO3^-2 from HCO3^-1
+
+    #     # Carbonates from salts
+    #     eq4 = CO3_2*C_K**2 - C_K2CO3*K_K2CO3             # Dissolution if K2CO3
+    #     eq5 = C_Zn_2*C_CO3_2 - C_ZnCO3*K_ZnCO3           # Dissolution of ZnCO3
+
+    #     # Fluorine species
+    #     eq6 = C_HF*C_F_1 - C_HF2*K_HF2                   # Dissolution of HF2
+    #     eq7 = C_H*C_F_1 - C_HF*K_HF                      # Dissolution of HF
+    #     eq8 = C_Zn_2*C_F_1 - C_ZnF_1*K_ZnF_1             # Dissolution of ZnF^-1
+
+    #     # Zn complexes and salts
+    #     eq9 = C_Zn_2*C_OH**4 - K_ZnOH4*C_ZnOH4          # Dissolution of Zn(OH)4^-2
+    #     eq10 = C_Zn_2*C_OH**3 - K_ZnOH3*C_ZnOH3          # Dissolution of Zn(OH)3^-1
+    #     eq11 = C_Zn_2*C_OH**2 - C_ZnOH2*Ksp_ZnOH2        # Dissolution of Zn(OH)2
+    #     eq12 = C_Zn_2*C_OH - K_ZnOH*C_ZnOH               # Dissolution of ZnOH^+1
+    #     eq13 = C_Zn_2*C_OH**2 - C_ZnO*Ksp_ZnO            # Dissolution of ZnO
+
+    #     # Potassium salts
+    #     eq14 = C_K_1*C_OH - C_KOH*K_KOH                   # Dissolution of KOH
+    #     eq15 = C_K_1*C_F_1 - C_KF*K_KF                    # Dissolution of KF
+
+    #     ## Conservation equations
+    #     eq16 = C_Zn_2 + C_ZnOH4 + C_ZnOH3 + C_ZnOH2 + C_ZnOH + C_ZnO + C_ZnCO3 + ZnF - C_Zn_tot   # Total concentration of Zn species
+    #     eq17 = C_CO2 + C_H2CO3 + C_HCO3_1 + C_CO3_2 + C_ZnCO3 + C_K2CO3 - C_COx_tot               # Total concentration of COx species
+    #     eq18 = C_F_1 + C_HF + C_HF2 + C_ZnF_1 + C_KF - C_F_tot                                    # Total concentration of F species
+    #     eq19 = C_K_1 + C_KF + 2*C_K2CO3 + C_KOH - C_K_tot                                         # Total concentration of K species
+
+    #     return [eq1, eq2, eq3, eq4, eq5, eq6, eq7, eq8, eq9, eq10, eq11, eq12, eq13, eq14, eq15, eq16, eq17, eq18, eq19]
 ########################################################################################################################
 
     # Calculating for hydroxide species
@@ -86,6 +123,10 @@ class ChemicalEquilibrium:
 
 # Initialize ChemicalEquilibrium
 equilibrium_system = ChemicalEquilibrium()
+
+# Intial conditions
+C_KOH = 7
+
 
 # pH range from 7.0 to 15.0 at 0.1 increments
 ph_range = np.arange(7.0, 15.1, 0.1)
