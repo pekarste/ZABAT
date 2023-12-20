@@ -236,7 +236,7 @@ class Zn_solution:
         plt.plot(self.pH_range, self.concentration_matrix[17, : ], linewidth = 3)
         plt.plot(self.pH_range, self.concentration_matrix[18, : ], linewidth = 3)
         plt.plot(self.pH_range, self.concentration_matrix[7, : ], linewidth = 3)
-        plt.hlines(self.c_KF, min(self.pH_range)-1, max(self.pH_range), 'k', '--')
+        plt.hlines(self.c_KF, min(self.pH_range), max(self.pH_range), 'k', '--')
         plt.title('Fluorine species')
         plt.xlabel('pH / [-]')
         plt.ylabel('Concentration / [M]')
