@@ -22,12 +22,12 @@ class Zn_solution:
         #'CO3': 10**(-2.0), , 'H2O': 10**4.18, 'KOH': 10**(-0.2)
         
         # Initial concentration of species
-        self.Zn_2 = initial_concentrations[0]
+        self.c_Zn_2 = initial_concentrations[0]
         self.c_KOH = initial_concentrations[1]
         self.c_K2CO3 = initial_concentrations[2]
         self.c_KF = initial_concentrations[3]
 
-        self.c_Zn_tot = self.Zn_2
+        self.c_Zn_tot = self.c_Zn_2
         self.c_COx_tot = self.c_K2CO3
         self.c_K_tot = self.c_KOH + 2*self.c_K2CO3 + self.c_KF
         self.c_F_tot = self.c_KF
@@ -190,7 +190,7 @@ class Zn_solution:
             self.concentration_matrix[:,i] = self.distribute_Zn_solution_species(x, self.pH_range[i])
 
     def plot_Zn_species_distribution(self):
-        
+
         # Zn-species
         plt.figure()
         plt.plot(self.pH_range, self.concentration_matrix[0, : ], linewidth = 3)
@@ -200,31 +200,39 @@ class Zn_solution:
         plt.plot(self.pH_range, self.concentration_matrix[4, : ], linewidth = 3)
         plt.plot(self.pH_range, self.concentration_matrix[5, : ], linewidth = 3)
         plt.plot(self.pH_range, self.concentration_matrix[6, : ], linewidth = 3)
-        #plt.plot(self.pH_range, self.concentration_matrix[7, : ], linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[7, : ], linewidth = 3)
+        plt.hlines(self.c_Zn_2, min(self.pH_range)-0.75, max(self.pH_range)+.75, 'k', '--')
+        plt.xlim(min(self.pH_range)-0.75, max(self.pH_range)+0.75)
         plt.title('Zn - ion species')
         plt.xlabel('pH / [-]')
         plt.ylabel('Concentration / [M]')
-        plt.legend(['Zn2+', 'Zn(OH)4^2-', 'Zn(OH)3^-', 'Zn(OH)2 (aq)', 'Zn(OH)^+', 'ZnO', 'ZnCO3'])#, 'ZnF^+'])
+        plt.legend(['Zn2+', 'Zn(OH)4^2-', 'Zn(OH)3^-', 'Zn(OH)2 (aq)', 'Zn(OH)^+', 'ZnO', 'ZnCO3', 'ZnF^+'])
         plt.show()
 
+    def plot_COx_species_distribution(self):
         # Carbonates
         plt.figure()
         plt.plot(self.pH_range, self.concentration_matrix[8, : ], linewidth = 3)
         plt.plot(self.pH_range, self.concentration_matrix[9, : ], linewidth = 3)
         plt.plot(self.pH_range, self.concentration_matrix[10, : ], linewidth = 3)
         plt.plot(self.pH_range, self.concentration_matrix[11, : ], linewidth = 3)
+        plt.hlines(self.c_K2CO3, min(self.pH_range)-0.75, max(self.pH_range)+0.75, 'k', '--')
+        plt.xlim(min(self.pH_range)-0.75, max(self.pH_range)+0.75)
         plt.title('COx - species')
         plt.xlabel('pH / [-]')
         plt.ylabel('Concentration / [M]')
         plt.legend(['CO2', 'H2CO3', 'HCO3^-', 'CO3^2-'])
         plt.show()
 
+    def plot_F_species_distribution(self):
         # Zn-species
         plt.figure()
         plt.plot(self.pH_range, self.concentration_matrix[16, : ], linewidth = 3)
         plt.plot(self.pH_range, self.concentration_matrix[17, : ], linewidth = 3)
         plt.plot(self.pH_range, self.concentration_matrix[18, : ], linewidth = 3)
         plt.plot(self.pH_range, self.concentration_matrix[7, : ], linewidth = 3)
+        plt.hlines(self.c_KF, min(self.pH_range)-0.75, max(self.pH_range)+0.75, 'k', '--')
+        plt.xlim(min(self.pH_range)-0.75, max(self.pH_range)+0.75)
         plt.title('F - ion species')
         plt.xlabel('pH / [-]')
         plt.ylabel('Concentration / [M]')
@@ -241,3 +249,5 @@ initial_concentrations = np.array([c_Zn_2_0, c_KOH_0, c_K2CO3_0, c_KF_0])
 Zn_solution_system = Zn_solution(initial_concentrations)
 Zn_solution_system.calculate_Zn_solution_concentrations()
 Zn_solution_system.plot_Zn_species_distribution()
+Zn_solution_system.plot_COx_species_distribution()
+Zn_solution_system.plot_F_species_distribution()
