@@ -198,13 +198,11 @@ class Zn_solution:
         plt.plot(self.pH_range, self.concentration_matrix[2, : ], linewidth = 3)
         plt.plot(self.pH_range, self.concentration_matrix[3, : ], linewidth = 3)
         plt.plot(self.pH_range, self.concentration_matrix[4, : ], linewidth = 3)
-        plt.plot(self.pH_range, self.concentration_matrix[5, : ], linewidth = 3)
-        plt.plot(self.pH_range, self.concentration_matrix[6, : ], linewidth = 3)
         #plt.plot(self.pH_range, self.concentration_matrix[7, : ], linewidth = 3)
         plt.title('Zn - ion species')
         plt.xlabel('pH / [-]')
         plt.ylabel('Concentration / [M]')
-        plt.legend(['Zn2+', 'Zn(OH)4^2-', 'Zn(OH)3^-', 'Zn(OH)2 (aq)', 'Zn(OH)^+', 'ZnO', 'ZnCO3'])#, 'ZnF^+'])
+        plt.legend(['Zn2+', 'Zn(OH)4^2-', 'Zn(OH)3^-', 'Zn(OH)2 (aq)', 'Zn(OH)^+'])#, 'ZnF^+'])
         plt.show()
 
         # Carbonates
