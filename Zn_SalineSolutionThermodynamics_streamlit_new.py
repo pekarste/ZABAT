@@ -17,6 +17,16 @@ st.title('Calculate the species')
 
 class Zn_solution:
     def __init__(self, initial_concentrations):
+
+        '''
+        initial_concentration: contains the initial concentration of Zn^2+, KOH, K2CO3, and KF in an array in mol/L
+
+        This part initialises the Zn_solution class
+
+        Currently, KOH is not used since it would dominate the pH, so the pH is instead set to vary.
+        It is also assumed full dissociation of K2CO3 and KF.
+        Concentration of Zn^+ is assumed to be a natural occuring concentration and usually very low
+        '''
         
         # Dictionary with equilibrium constants
         self.equilibrium_constants = {  'ZnOH4': 10**18, 'ZnOH3': 10**13.7,'ZnOH2_sat': 10**(-14.82),'ZnOH2_aq': 10**8.3, 'ZnOH': 10**5.0, 'ZnO': 10**(-15.96), \
@@ -26,12 +36,12 @@ class Zn_solution:
         #'CO3': 10**(-2.0), , 'H2O': 10**4.18, 'KOH': 10**(-0.2)
         
         # Initial concentration of species
-        self.Zn_2 = initial_concentrations[0]       # Setting the initial concentration of Zn^2+ for the system
+        self.c_Zn_2 = initial_concentrations[0]     # Setting the initial concentration of Zn^2+ for the system
         self.c_KOH = initial_concentrations[1]      # Setting the initial concentration of KOH for the system -- Not used
         self.c_K2CO3 = initial_concentrations[2]    # Setting the initial concentration of K2CO3 for the system
         self.c_KF = initial_concentrations[3]       # Setting the initial concentration of KF
 
-        self.c_Zn_tot = self.Zn_2                   # The total concentration of Zn species is always equal to the initial concentration of Zn^2+
+        self.c_Zn_tot = self.c_Zn_2                 # The total concentration of Zn species is always equal to the initial concentration of Zn^2+
         self.c_COx_tot = self.c_K2CO3               # The total concentration of COx species is always equal to the initial concentration of CO3^2-
         self.c_K_tot = self.c_KOH + 2*self.c_K2CO3 + self.c_KF
         self.c_F_tot = self.c_KF                    # The total concentration of F species is always equal to the initial concentration of KF
@@ -45,6 +55,17 @@ class Zn_solution:
 
     # Method containing the different equilibria. Returns an array of concentration for the different species
     def distribute_Zn_solution_species(self, x, pH):
+        '''
+        INPUT:
+        x: An array containing first estimates of the Zn^2+, CO3^2-, K+, and F- (based on the initial value) -- Needed since fsolve is used later
+        pH: An array of the pH range
+
+        This part contains the thermodynamic equilibrium equations describing the distribution of the different
+        species based on the estimated guesses from x. This is used since fsolve is used later to solve the system
+
+        RETURNS:
+        concentration_array: An array of the different concentrations from the system of equilibriums. 
+        '''
         
         # Empty array to store solutions
         concentration_array = np.zeros(self.num_species)
@@ -66,7 +87,7 @@ class Zn_solution:
         K_H2CO3 = self.equilibrium_constants['H2CO3']           # Equilibrium constant for formation of H2CO3
         K_HCO3_1 = self.equilibrium_constants['HCO3']           # Equilibrium constant for formation of HCO3^-
 
-        #K_K2CO3 = self.equilibrium_constants['K2CO3']           #- Missing -- K2CO3 gives intial conditions
+        #K_K2CO3 = self.equilibrium_constants['K2CO3']          #- Missing -- K2CO3 gives intial conditions
         K_ZnCO3 = self.equilibrium_constants['ZnCO3']           # Equilibrium constant for formation of ZnCO3
 
         K_HF2 = self.equilibrium_constants['HF2']               # Equilibrium constant for formation of HF2^-
@@ -140,8 +161,21 @@ class Zn_solution:
  
     # Method which calculates the conservation of Zn-species, COx-species, and F-species. Returns an array with the total concentrations
     def conservation_Zn_solution(self, x, pH):
+        '''
+        INPUT
+        x: An array containing first estimates of the Zn^2+, CO3^2-, K+, and F- (based on the initial value) -- Needed since fsolve is used later
+        pH: An array of the pH range
+
+        This part calculates the conservatuion of different species and uses fsolve solve the system
+
+        RETURN:
+        equation_array: An array of the total concentration of Zn-, CO3-, F-, and K-species to match the initial concentration
+        '''
+
+        # Getting the concentration array from the system of equilibriums
         concentration_array = self.distribute_Zn_solution_species(x, pH)
 
+        # Extracting the different concentrations from the concentration_array
         c_Zn_2 = concentration_array[0]
         c_ZnOH4 = concentration_array[1]
         c_ZnOH3 = concentration_array[2]
@@ -185,6 +219,12 @@ class Zn_solution:
     
     # Calculates the different concentrations based on the conservation of species
     def calculate_Zn_solution_concentrations(self):
+        '''
+        This part uses fsolve to solve the system of equilibrium equations based on initial guesses. 
+        Using lambda x permits the use of x in the prior methods
+
+        It appends the solutions to the different equilibria the empty concentration_matrix in the init.
+        '''
 
         for i in range(len(self.pH_range)):
             c_Zn_2_0, c_CO3_2_0, c_K_1_0, c_F_1_0 = self.c_Zn_tot, self.c_COx_tot, self.c_K_tot, self.c_F_tot
@@ -196,6 +236,9 @@ class Zn_solution:
             self.concentration_matrix[:,i] = self.distribute_Zn_solution_species(x, self.pH_range[i])
 
     def plot_Zn_species_distribution(self):
+        '''
+        This part plots the concentration distribution for all Zn-species
+        '''
         
         # Zn-species
         fig = plt.figure(figsize=(8,8))
@@ -206,7 +249,7 @@ class Zn_solution:
         plt.plot(self.pH_range, self.concentration_matrix[3, : ], linewidth = 3)
         plt.plot(self.pH_range, self.concentration_matrix[4, : ], linewidth = 3)
         plt.plot(self.pH_range, self.concentration_matrix[7, : ], linewidth = 3)
-        plt.hlines(self.Zn_2, min(self.pH_range), max(self.pH_range), 'k', '--')
+        plt.hlines(self.c_Zn_2, min(self.pH_range), max(self.pH_range), 'k', '--')
         plt.title('Zn-ion species')
         plt.xlabel('pH / [-]')
         plt.ylabel('Concentration / [M]')
@@ -214,6 +257,9 @@ class Zn_solution:
         st.pyplot(fig)
 
     def plot_carbonate_species_distribution(self):
+        '''
+        This part plots the concentration distribution for all COx species
+        '''
 
         # Carbonates
         fig = plt.figure(figsize = (8,8))
@@ -229,6 +275,9 @@ class Zn_solution:
         st.pyplot(fig)
 
     def plot_fluorine_species_distribution(self):
+        '''
+        This part plots the concentration distribution for all F-species
+        '''
 
         # Fluorine species
         fig = plt.figure(figsize = (8,8))
