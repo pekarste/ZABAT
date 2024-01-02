@@ -10,13 +10,18 @@ Based on chat_gpt.py
 import numpy as np
 from scipy.optimize import fsolve
 import matplotlib.pyplot as plt
+import streamlit as st
+import pandas as pd
+
+st.title('Calculate the species')
 
 class Zn_solution:
     def __init__(self, initial_concentrations):
 
         '''
-        INPUT:
         initial_concentration: contains the initial concentration of Zn^2+, KOH, K2CO3, and KF in an array in mol/L
+
+        This part initialises the Zn_solution class
 
         Currently, KOH is not used since it would dominate the pH, so the pH is instead set to vary.
         It is also assumed full dissociation of K2CO3 and KF.
@@ -42,12 +47,13 @@ class Zn_solution:
         self.c_F_tot = self.c_KF                    # The total concentration of F species is always equal to the initial concentration of KF
 
         # Defining the pH
-        self.pH_range = np.arange(0, 15.1, 0.1)     # The pH range for the study
+        self.pH_range = np.arange(0, 15.1, 0.1)     # The pH range under study -- can be a slider
 
         # Defining matrix to keep the concentrations of calculated species
         self.num_species = 21                       # Total number of species in the system
         self.concentration_matrix = np.zeros((self.num_species, len(self.pH_range)))# Matrix for storing the concentrations for different pH values
 
+    # Method containing the different equilibria. Returns an array of concentration for the different species
     def distribute_Zn_solution_species(self, x, pH):
         '''
         INPUT:
@@ -153,6 +159,7 @@ class Zn_solution:
 
         return concentration_array
  
+    # Method which calculates the conservation of Zn-species, COx-species, and F-species. Returns an array with the total concentrations
     def conservation_Zn_solution(self, x, pH):
         '''
         INPUT
@@ -195,11 +202,11 @@ class Zn_solution:
         c_OH = concentration_array[20]
 
 
-        # Defining total concentrations which describes conservation
-        c_Zn_tot = c_Zn_2 + c_ZnOH4 + c_ZnOH3 + c_ZnOH2 + c_ZnOH + c_ZnO + c_ZnCO3 + c_ZnF_1
-        c_COx_tot = c_CO2 + c_CO3_2 + c_HCO3_1 + c_H2CO3
-        c_K_tot = c_K_1 #+ c_KF + 2*c_K2CO3 + c_KOH
-        c_F_tot = c_F_1 + c_HF + c_HF2 + c_ZnF_1 #+ c_KF 
+        # Defining total concentrations
+        c_Zn_tot = c_Zn_2 + c_ZnOH4 + c_ZnOH3 + c_ZnOH2 + c_ZnOH + c_ZnO + c_ZnCO3 + c_ZnF_1    # Total concentration of Zn species
+        c_COx_tot = c_CO2 + c_CO3_2 + c_HCO3_1 + c_H2CO3                                        # Total concentration of COx species
+        c_K_tot = c_K_1 #+ c_KF + 2*c_K2CO3 + c_KOH                                             # Total concentration of F species
+        c_F_tot = c_F_1 + c_HF + c_HF2 + c_ZnF_1 #+ c_KF                                        # Total concentration of F species
 
         ## Conservation equations
         equation_array = np.zeros(4)
@@ -210,6 +217,7 @@ class Zn_solution:
 
         return equation_array
     
+    # Calculates the different concentrations based on the conservation of species
     def calculate_Zn_solution_concentrations(self):
         '''
         This part uses fsolve to solve the system of equilibrium equations based on initial guesses. 
@@ -231,72 +239,192 @@ class Zn_solution:
         '''
         This part plots the concentration distribution for all Zn-species
         '''
-
+        
         # Zn-species
-        plt.figure()
+        fig = plt.figure(figsize=(8,8))
+        # plt.title('Zn species')
         plt.plot(self.pH_range, self.concentration_matrix[0, : ], linewidth = 3)
         plt.plot(self.pH_range, self.concentration_matrix[1, : ], linewidth = 3)
         plt.plot(self.pH_range, self.concentration_matrix[2, : ], linewidth = 3)
         plt.plot(self.pH_range, self.concentration_matrix[3, : ], linewidth = 3)
         plt.plot(self.pH_range, self.concentration_matrix[4, : ], linewidth = 3)
-        plt.plot(self.pH_range, self.concentration_matrix[5, : ], linewidth = 3)
-        plt.plot(self.pH_range, self.concentration_matrix[6, : ], linewidth = 3)
         plt.plot(self.pH_range, self.concentration_matrix[7, : ], linewidth = 3)
-        plt.hlines(self.c_Zn_2, min(self.pH_range)-0.75, max(self.pH_range)+.75, 'k', '--')
-        plt.xlim(min(self.pH_range)-0.75, max(self.pH_range)+0.75)
-        plt.title('Zn - ion species')
+        plt.hlines(self.c_Zn_2, min(self.pH_range), max(self.pH_range), 'k', '--')
+        plt.title('Zn-ion species')
         plt.xlabel('pH / [-]')
         plt.ylabel('Concentration / [M]')
-        plt.legend(['Zn2+', 'Zn(OH)4^2-', 'Zn(OH)3^-', 'Zn(OH)2 (aq)', 'Zn(OH)^+', 'ZnO', 'ZnCO3', 'ZnF^+'])
-        plt.show()
+        plt.legend(['Zn$^{2+}$', 'Zn(OH)4^2-', 'Zn(OH)3^-', 'Zn(OH)2 (aq)', 'Zn(OH)^+', 'ZnF^+'])
+        st.pyplot(fig)
 
-    def plot_COx_species_distribution(self):
+    def plot_carbonate_species_distribution(self):
         '''
         This part plots the concentration distribution for all COx species
         '''
 
         # Carbonates
-        plt.figure()
+        fig = plt.figure(figsize = (8,8))
         plt.plot(self.pH_range, self.concentration_matrix[8, : ], linewidth = 3)
         plt.plot(self.pH_range, self.concentration_matrix[9, : ], linewidth = 3)
         plt.plot(self.pH_range, self.concentration_matrix[10, : ], linewidth = 3)
         plt.plot(self.pH_range, self.concentration_matrix[11, : ], linewidth = 3)
-        plt.hlines(self.c_K2CO3, min(self.pH_range)-0.75, max(self.pH_range)+0.75, 'k', '--')
-        plt.xlim(min(self.pH_range)-0.75, max(self.pH_range)+0.75)
+        plt.hlines(self.c_K2CO3, min(self.pH_range), max(self.pH_range), 'k', '--')
         plt.title('COx - species')
         plt.xlabel('pH / [-]')
         plt.ylabel('Concentration / [M]')
         plt.legend(['CO2', 'H2CO3', 'HCO3^-', 'CO3^2-'])
-        plt.show()
+        st.pyplot(fig)
 
-    def plot_F_species_distribution(self):
+    def plot_fluorine_species_distribution(self):
         '''
         This part plots the concentration distribution for all F-species
         '''
-        # Zn-species
-        plt.figure()
+
+        # Fluorine species
+        fig = plt.figure(figsize = (8,8))
         plt.plot(self.pH_range, self.concentration_matrix[16, : ], linewidth = 3)
         plt.plot(self.pH_range, self.concentration_matrix[17, : ], linewidth = 3)
         plt.plot(self.pH_range, self.concentration_matrix[18, : ], linewidth = 3)
         plt.plot(self.pH_range, self.concentration_matrix[7, : ], linewidth = 3)
-        plt.hlines(self.c_KF, min(self.pH_range)-0.75, max(self.pH_range)+0.75, 'k', '--')
-        plt.xlim(min(self.pH_range)-0.75, max(self.pH_range)+0.75)
-        plt.title('F - ion species')
+        plt.hlines(self.c_KF, min(self.pH_range), max(self.pH_range), 'k', '--')
+        plt.title('Fluorine species')
         plt.xlabel('pH / [-]')
         plt.ylabel('Concentration / [M]')
         plt.legend(['F^-', 'HF', 'HF^2-', 'ZnF^+'])
-        plt.show()
+        st.pyplot(fig)
+
+explanation = st.text('This app is meant to calculate and plot the species distribution \n'
+             'of an aqueous solution of Zn-ions, carbonates, and fluorine species \n'
+             'based on thermodynamics.')
+
+
+explanation_toggle = st.text('You can toggle which thermodynamic system you want to study.\n'
+                             'You may select one or multiple systems at a time, and also choose\n'
+                             'their initial concentrations.\n'
+                             'Note: if you want to see two or more plots at a time, they will\n'
+                             'be plotted right after eachother.')
+explanation_error_1 = str('Note: an error message will occur when the toggle button is activated \n'
+                             'until a concentration is defined')
+explanation_error_2 = str('Note: an error message will occur when both toggle buttons are activated \n'
+                             'until both concentrations are defined')
+explanation_error_3 = str('Note: an error message will occur when all toggle buttons are activated \n'
+                             'until all the concentrations are defined')
+                             
+Zn_on = st.toggle('Zn species')
+COx_on = st.toggle('Carbonate species')
+F_on = st.toggle('Fluorine species')
 
 # Initialize ChemicalEquilibrium
-c_Zn_2_0 = 10**(-6)
+c_Zn_2_0 = 1*10**(-6)
 c_KOH_0 = 7
 c_K2CO3_0 = 1.4
 c_KF_0 = 1.4
 
-# Initialises and solving the system
-initial_concentrations = np.array([c_Zn_2_0, c_KOH_0, c_K2CO3_0, c_KF_0])   # Initial concentrations
-Zn_solution_system = Zn_solution(initial_concentrations)                    # Initialises the Zn-solution class
-Zn_solution_system.calculate_Zn_solution_concentrations()                   # Calculates the concentration distributions
-Zn_solution_system.plot_Zn_species_distribution()                           # Plots the Zn-species concentration distribution
-Zn_solution_system.plot_COx_species_distribution()                          # Plots the COx-species concentration distribution
-Zn_solution_system.plot_F_species_distribution()                            # Plots the F-species concentration distribution
+if Zn_on==True and COx_on==False and F_on==False:
+    initial_Zn = st.number_input("Insert intial Zn concentration (mol/L)", value=None, placeholder="Type a number...")
+    st.write('The initial Zn concentration is: ', initial_Zn, 'mol/L')
+    if initial_Zn==None:
+        st.write(explanation_error_1)
+    c_Zn_2_0 = initial_Zn
+
+    initial_concentrations = np.array([c_Zn_2_0, c_KOH_0, c_K2CO3_0, c_KF_0])
+
+    Zn_solution_system = Zn_solution(initial_concentrations)
+    Zn_solution_system.calculate_Zn_solution_concentrations()
+    Zn_solution_system.plot_Zn_species_distribution()
+
+elif Zn_on==False and COx_on==True and F_on ==False:
+    initial_CO3 = st.number_input("Insert intial CO$_{3}^{2-}$ concentration (mol/L)", value=None, placeholder="Type a number...")
+    st.write('The initial CO$_{3}^{2-}$ concentration is: ', initial_CO3, 'mol/L')
+    if initial_CO3==None:
+        st.write(explanation_error_1)
+    c_K2CO3_0 = initial_CO3
+
+    initial_concentrations = np.array([c_Zn_2_0, c_KOH_0, c_K2CO3_0, c_KF_0])
+
+    Zn_solution_system = Zn_solution(initial_concentrations)
+    Zn_solution_system.calculate_Zn_solution_concentrations()
+    Zn_solution_system.plot_carbonate_species_distribution()
+
+elif Zn_on==False and COx_on==False and F_on==True :
+    initial_F = st.number_input("Insert intial F$^{-}$ concentration (mol/L)", value=None, placeholder="Type a number...")
+    st.write('The initial F$^{-}$ concentration is: ', initial_F, 'mol/L')
+    if initial_F==None:
+        st.write(explanation_error_1)
+    c_KF_0 = initial_F
+
+    initial_concentrations = np.array([c_Zn_2_0, c_KOH_0, c_K2CO3_0, c_KF_0])
+
+    Zn_solution_system = Zn_solution(initial_concentrations)
+    Zn_solution_system.calculate_Zn_solution_concentrations()
+    Zn_solution_system.plot_fluorine_species_distribution()
+
+elif Zn_on==True and COx_on==True and F_on==False:
+    initial_Zn = st.number_input("Insert intial Zn concentration (mol/L)", value=None, placeholder="Type a number...")
+    initial_CO3 = st.number_input("Insert intial CO$_3^{2-}$ concentration (mol/L)", value=None, placeholder="Type a number...")
+    
+    st.write('The initial Zn and COx concentration is: ', initial_Zn, 'mol/L, ', 'and ', initial_CO3, 'mol/L')
+    if initial_Zn==None or initial_CO3==None:
+        st.write(explanation_error_2)
+    
+    c_Zn_2_0 = initial_Zn
+    c_K2CO3_0 = initial_CO3
+
+    initial_concentrations = np.array([c_Zn_2_0, c_KOH_0, c_K2CO3_0, c_KF_0])
+    Zn_solution_system = Zn_solution(initial_concentrations)    
+    Zn_solution_system.calculate_Zn_solution_concentrations()
+    Zn_solution_system.plot_Zn_species_distribution()
+    Zn_solution_system.plot_carbonate_species_distribution()
+
+elif Zn_on==True and COx_on==False and F_on==True:
+    initial_Zn = st.number_input("Insert intial Zn concentration (mol/L)", value=None, placeholder="Type a number...")
+    initial_F = st.number_input("Insert intial Fluorine concentration (mol/L)", value=None, placeholder="Type a number...")
+    
+    st.write('The initial Zn and F concentration is: ', initial_Zn, 'mol/L, ', 'and ', initial_F, 'mol/L')
+    if initial_Zn==None or initial_F==None:
+        st.write(explanation_error_2)
+    
+    c_Zn_2_0 = initial_Zn
+    c_KF_0 = initial_F
+
+    initial_concentrations = np.array([c_Zn_2_0, c_KOH_0, c_K2CO3_0, c_KF_0])
+    Zn_solution_system = Zn_solution(initial_concentrations)    
+    Zn_solution_system.calculate_Zn_solution_concentrations()
+    Zn_solution_system.plot_Zn_species_distribution()
+    Zn_solution_system.plot_fluorine_species_distribution()
+
+elif Zn_on==False and COx_on==True and F_on==True:
+    initial_CO3 = st.number_input("Insert intial CO$_3^{2-}$ concentration (mol/L)", value=None, placeholder="Type a number...")
+    initial_F = st.number_input("Insert intial Fluorine concentration (mol/L)", value=None, placeholder="Type a number...")
+    
+    st.write('The initial COx and F concentration is: ', initial_CO3, 'mol/L, ', 'and ', initial_F, 'mol/L')
+    if initial_CO3==None or initial_F==None:
+        st.write(explanation_error_2)
+
+    c_K2CO3_0 = initial_CO3
+    c_KF_0 = initial_F
+
+    initial_concentrations = np.array([c_Zn_2_0, c_KOH_0, c_K2CO3_0, c_KF_0])
+    Zn_solution_system = Zn_solution(initial_concentrations)    
+    Zn_solution_system.calculate_Zn_solution_concentrations()
+    Zn_solution_system.plot_carbonate_species_distribution()
+    Zn_solution_system.plot_fluorine_species_distribution()
+
+elif Zn_on==True and COx_on==True and F_on==True:
+    initial_Zn = st.number_input("Insert intial Zn concentration (mol/L)", value=None, placeholder="Type a number...") 
+    initial_CO3 = st.number_input("Insert intial CO$_3^{2-}$ concentration (mol/L)", value=None, placeholder="Type a number...")
+    initial_F = st.number_input("Insert intial Fluorine concentration (mol/L)", value=None, placeholder="Type a number...")
+
+    st.write('The initial Zn, COx, and F concentration is: ', initial_Zn, 'mol/L, ', initial_CO3, 'mol/L, and', initial_F)
+    if initial_Zn==None or initial_CO3==None or initial_F==None:
+        st.write(explanation_error_3)
+
+    c_Zn_2_0 = initial_Zn
+    c_K2CO3_0 = initial_CO3
+    c_KF_0 = initial_F
+
+    initial_concentrations = np.array([c_Zn_2_0, c_KOH_0, c_K2CO3_0, c_KF_0])
+    Zn_solution_system = Zn_solution(initial_concentrations)    
+    Zn_solution_system.calculate_Zn_solution_concentrations()
+    Zn_solution_system.plot_Zn_species_distribution()
+    Zn_solution_system.plot_carbonate_species_distribution()
+    Zn_solution_system.plot_fluorine_species_distribution()
