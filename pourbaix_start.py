@@ -41,9 +41,11 @@ plt.figure()
 plt.plot(pH,EHER, '--')     # Line for the HER
 plt.plot(pH,EOER, '--')     # Line for the OER
 pZn_values = np.array([0, 2, 4])# Values we iterate through for the activity of dissolved Zn
-pZn_values_list = ['pZn = 0', 'pZn = 2', 'pZn = 4']
+pZn_values_dict = {'pZn': pZn_values} # Maybe make this a dictionary as Dict = {'pZn': pZn_values} Or something...
 
 for i in range(len(pZn_values)):
+
+    pZn_string = f'pZn =  {int(pZn_values_dict['pZn'][i])}' # The string printed for the different pZn values in the plot. 
 
     # Concentration constants
     constants_p = {             # Setting all values to be the same
@@ -98,19 +100,14 @@ for i in range(len(pZn_values)):
     plt.plot(pH[index_I_III: index_III_IV], EIII[index_I_III: index_III_IV], 'c', label='Zn(OH)$_2$ - Zn')
     plt.plot(pH[index_III_IV:index_IV_V], EIV[index_III_IV:index_IV_V], 'r', label='Zn(OH)$_3^-$ - Zn')
     plt.plot(pH[index_IV_V:], EV[index_IV_V:], 'm', label='Zn(OH)$_4^{2-}$ - Zn')
-    #plt.plot(pH, EIII, 'k', label='Zn(OH)$_2$ - Zn')
-    #plt.plot(pH, EIV, 'r', label='Zn(OH)$_3^-$ - Zn')
-    #plt.plot(pH, EV, 'b', label='Zn(OH)$_4^{2-}$ - Zn')
-    #plt.plot(pH, EVI, 'k', label='ZnO - Zn')
-    #plt.vlines(pHVIII, -1.5, 1.5, 'k', label='Zn$^{2+}$ - Zn(OH)$_2$')
     plt.vlines(pH[index_I_III], EI[index_I_III], 1.5, 'k', label = 'pH = ')
     #plt.vlines(pHIX, -1.5, 1.5, 'k', label='Zn(OH)$_{2}$ - Zn(OH)$_3^-$')
     plt.vlines(pH[index_III_IV], EIII[index_III_IV], 1.5, 'r', label='test2')
     #plt.vlines(pHX, -1.5, 1.5, 'k', label='Zn(OH)$_{3}^-$ - Zn(OH)$_4^{2-}$')
     plt.vlines(pH[index_IV_V], EIV[index_IV_V], 1.5, 'm', label = 'test3')
-    plt.text(pH[index_I_III+10], 1, pZn_values_list[i], color='k', rotation = 90)   # Adding pZn values to vertical lines for different pZn values-- must be fixed
-    plt.text(pH[index_III_IV+10], 1, pZn_values_list[i], color='r', rotation = 90)  # Adding pZn values to vertical lines for different pZn values-- must be fixed
-    plt.text(pH[index_IV_V+10], 1, pZn_values_list[i], color='m', rotation = 90)    # Adding pZn values to vertical lines for different pZn values-- must be fixed
+    plt.text(pH[index_I_III+10], 1, pZn_string, color='k', rotation = 90)   # Adding pZn values to vertical lines for different pZn values-- must be fixed
+    plt.text(pH[index_III_IV+10], 1, pZn_string, color='r', rotation = 90)  # Adding pZn values to vertical lines for different pZn values-- must be fixed
+    plt.text(pH[index_IV_V+10], 1, pZn_string, color='m', rotation = 90)    # Adding pZn values to vertical lines for different pZn values-- must be fixed
 #plt.legend()
 
 plt.text(2, -1.25, 'Zn(s)', fontsize=12, color='black')
