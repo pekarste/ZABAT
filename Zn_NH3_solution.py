@@ -250,10 +250,14 @@ class Zn_solution:
 
 
         # Defining total concentrations which describes conservation
-        c_Zn_tot = c_Zn_2 + c_ZnOH4 + c_ZnOH3 + c_ZnOH2 + c_ZnOH + c_ZnO + c_ZnCO3 + c_ZnNH3 + c_ZnNH3_2 + c_ZnNH3_3 + c_ZnNH3_4 + c_ZnNH3OH3  # Total concentration of Zn species
+        c_Zn_tot = c_Zn_2 + c_ZnOH4 + c_ZnOH3 + c_ZnOH2 + c_ZnOH + c_ZnO + c_ZnCO3 + \
+                   c_ZnNH3 + c_ZnNH3_2 + c_ZnNH3_3 + c_ZnNH3_4 +\
+                   c_ZnNH3OH + c_ZnNH3_2OH + c_ZnNH3_3OH + c_ZnNH3_OH_2 + c_ZnNH3_2OH_2 + c_ZnNH3OH3                        # Total concentration of Zn species
         c_COx_tot = c_CO2 + c_CO3_2 + c_HCO3_1 + c_H2CO3 + c_ZnCO3
         c_K_tot = c_K_1 #+ 2*c_K2CO3 + c_KOH
-        c_NHx_tot = c_ZnNH3 + 2*c_ZnNH3_2 + 3*c_ZnNH3_3 + 4*c_ZnNH3_4 + c_NH3 + c_NH4 + c_ZnNH3OH3
+        c_NHx_tot = c_ZnNH3 + 2*c_ZnNH3_2 + 3*c_ZnNH3_3 + 4*c_ZnNH3_4 + \
+                    c_ZnNH3OH + 2*c_ZnNH3_2OH + 3*c_ZnNH3_3OH + c_ZnNH3_OH_2 + 2*c_ZnNH3_2OH_2 + c_ZnNH3OH3 +\
+                    c_NH3 + c_NH4
 
         ## Conservation equations
         equation_array = np.zeros(4)
@@ -343,11 +347,31 @@ class Zn_solution:
         plt.legend(['Zn(NH$_{3}$)$^{2+}$', 'Zn(NH$_{3}$)$^{2+}_{2}$', 'Zn(NH$_{3}$)$^{2+}_{3}$', 'Zn(NH$_{3}$)$^{2+}_{4}$', 'NH$_{3}$', 'NH$_{4}^{+}$'])
         plt.show()
 
+    def plot_NHxOHy_species_distribution(self):
+        '''
+        This part plots the concentration distribution for all F-species
+        '''
+        # NHxOHy-species
+        plt.figure()
+        plt.plot(self.pH_range, self.concentration_matrix[11, : ], linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[12, : ], linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[13, : ], linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[14, : ], linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[15, : ], linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[16, : ], linewidth = 3)
+        #plt.hlines(self.NH4OH, min(self.pH_range)-0.75, max(self.pH_range)+0.75, 'k', '--')
+        plt.xlim(min(self.pH_range)-0.75, max(self.pH_range)+0.75)
+        plt.title('NHxOHy - ion species')
+        plt.xlabel('pH / [-]')
+        plt.ylabel('Concentration / [M]')
+        plt.legend(['Zn(NH$_{3}$)(OH)$^{+}$', 'Zn(NH$_{3}$)$_{2}$(OH)$^{+}$', 'Zn(NH$_{3}$)$_{3}$(OH)$^{+}$', 'Zn(NH$_{3}$)(OH)$_{2}$', 'Zn(NH$_{3}$)$_{2}$(OH)$_{2}$', 'Zn(NH$_{3}$)(OH)$_{3}^{-}$'])
+        plt.show()
+
 # Initialize ChemicalEquilibrium
 c_Zn_2_0 = 10**(-6)
 c_KOH_0 = 6#6
 c_K2CO3_0 = 1.5#1.5
-c_NH4OH_0 = 10**(-7)#0.5 --  Check this number, can't be 1.5
+c_NH4OH_0 = 10**(-7)#0.5 --  Check this number, can't be higher than 10^-7 with dictionary 2 and can't be higher than 10^-4 with dictionary 1
 
 # Initialises and solving the system
 initial_concentrations = np.array([c_Zn_2_0, c_KOH_0, c_K2CO3_0, c_NH4OH_0])   # Initial concentrations
@@ -355,7 +379,8 @@ Zn_solution_system = Zn_solution(initial_concentrations)                    # In
 Zn_solution_system.calculate_Zn_solution_concentrations()                   # Calculates the concentration distributions
 Zn_solution_system.plot_Zn_species_distribution()                           # Plots the Zn-species concentration distribution
 Zn_solution_system.plot_COx_species_distribution()                          # Plots the COx-species concentration distribution
-Zn_solution_system.plot_NHx_species_distribution()                          # Plots the F-species concentration distribution
+Zn_solution_system.plot_NHx_species_distribution()                          # Plots the Zn(NH3)x concentration distribution
+Zn_solution_system.plot_NHxOHy_species_distribution()                       # Plots the Zn(NH3)x(OH)y concentration distribution
 
-print(Zn_solution_system.concentration_matrix[17,:])
-print(Zn_solution_system.concentration_matrix[7,:])
+#print(Zn_solution_system.concentration_matrix[17,:])
+#print(Zn_solution_system.concentration_matrix[7,:])
