@@ -43,18 +43,18 @@ class Zn_solution:
         self.c_Zn_2 = initial_concentrations[0]     # Setting the initial concentration of Zn^2+ for the system
         self.c_KOH = initial_concentrations[1]      # Setting the initial concentration of KOH for the system -- Not used
         self.c_K2CO3 = initial_concentrations[2]    # Setting the initial concentration of K2CO3 for the system
-        self.NH4OH = initial_concentrations[3]      # Setting the initial concentration of NH4OH
+        self.c_NH4OH = initial_concentrations[3]      # Setting the initial concentration of NH4OH
 
         self.c_Zn_tot = self.c_Zn_2                 # The total concentration of Zn species is always equal to the initial concentration of Zn^2+
         self.c_COx_tot = self.c_K2CO3               # The total concentration of COx species is always equal to the initial concentration of CO3^2-
         self.c_K_tot = self.c_KOH + 2*self.c_K2CO3
-        self.c_NHx_tot = self.NH4OH                    # The total concentration of F species is always equal to the initial concentration of KF
+        self.c_NHx_tot = self.c_NH4OH                    # The total concentration of F species is always equal to the initial concentration of KF
 
         # Defining the pH
         self.pH_range = np.arange(0, 15.1, 0.1)     # The pH range for the study
 
         # Defining matrix to keep the concentrations of calculated species
-        self.num_species = 26                       # Total number of species in the system
+        self.num_species = 30                       # Total number of species in the system
         self.concentration_matrix = np.zeros((self.num_species, len(self.pH_range)))# Matrix for storing the concentrations for different pH values
     def distribute_Zn_solution_species(self, x, pH):
         '''
@@ -144,6 +144,19 @@ class Zn_solution:
         c_ZnNH3_2OH_2 = K_ZnNH3_2OH_2*c_Zn_2*(c_NH3**2)*c_OH**2
         c_ZnNH3OH3 = K_ZnNH3_OH_3*c_Zn_2*c_NH3*c_OH**3
 
+        # Conservation equations
+        c_Zn_tot = c_Zn_2 + c_ZnOH4 + c_ZnOH3 + c_ZnOH2 + c_ZnOH + c_ZnO + c_ZnCO3 + \
+                   c_ZnNH3 + c_ZnNH3_2 + c_ZnNH3_3 + c_ZnNH3_4 +\
+                   c_ZnNH3OH + c_ZnNH3_2OH + c_ZnNH3_3OH + c_ZnNH3_OH_2 + c_ZnNH3_2OH_2 + c_ZnNH3OH3            # Total concentration of Zn species
+        
+        c_COx_tot = c_CO2 + c_CO3_2 + c_HCO3_1 + c_H2CO3 + c_ZnCO3                                              # Total concentration of COx species
+        
+        c_K_tot = c_K_1 #+ 2*c_K2CO3 + c_KOH                                                                    # Total concentration of K+
+        
+        c_NHx_tot = c_ZnNH3 + 2*c_ZnNH3_2 + 3*c_ZnNH3_3 + 4*c_ZnNH3_4 + \
+                    c_ZnNH3OH + 2*c_ZnNH3_2OH + 3*c_ZnNH3_3OH + c_ZnNH3_OH_2 + 2*c_ZnNH3_2OH_2 + c_ZnNH3OH3 +\
+                    c_NH3 + c_NH4                     
+
         ## Initilise concentration array
         
         # Zn ion
@@ -188,6 +201,12 @@ class Zn_solution:
         concentration_array[24] = c_H           # Concentration of H+
         concentration_array[25] = c_OH          # Concentration of OH-
 
+        # Conservation of species
+        concentration_array[26] = c_Zn_tot      # Total concencetration of Zn species
+        concentration_array[27] = c_COx_tot
+        concentration_array[28] = c_K_tot
+        concentration_array[29] = c_NHx_tot
+
         return concentration_array
  
     def conservation_Zn_solution(self, x, pH):
@@ -205,55 +224,55 @@ class Zn_solution:
         # Getting the concentration array from the system of equilibriums
         concentration_array = self.distribute_Zn_solution_species(x, pH)
 
-        # Extracting the different concentrations from the concentration_array
-        # Zn ion
-        c_Zn_2 = concentration_array[0]         # Concentration of Zn^2+
+        # # Extracting the different concentrations from the concentration_array
+        # # Zn ion
+        # c_Zn_2 = concentration_array[0]         # Concentration of Zn^2+
         
-        # Zn with OH-
-        c_ZnOH4 = concentration_array[1]        # Concentration of Zn(OH)4^2- 
-        c_ZnOH3 = concentration_array[2]        # Concentration of Zn(OH)3^-
-        c_ZnOH2 = concentration_array[3]        # Concentration of Zn(OH)2_aq
-        c_ZnOH = concentration_array[4]         # Concentration of Zn(OH)+
-        c_ZnO = concentration_array[5]          # Concentration of ZnO
-        c_ZnCO3 = concentration_array[6]        # Concentration of ZnCO3
+        # # Zn with OH-
+        # c_ZnOH4 = concentration_array[1]        # Concentration of Zn(OH)4^2- 
+        # c_ZnOH3 = concentration_array[2]        # Concentration of Zn(OH)3^-
+        # c_ZnOH2 = concentration_array[3]        # Concentration of Zn(OH)2_aq
+        # c_ZnOH = concentration_array[4]         # Concentration of Zn(OH)+
+        # c_ZnO = concentration_array[5]          # Concentration of ZnO
+        # c_ZnCO3 = concentration_array[6]        # Concentration of ZnCO3
 
-        # Zn with NH3
-        c_ZnNH3 = concentration_array[7]        # Concentration of Zn(NH3)
-        c_ZnNH3_2 = concentration_array[8]      # Concentration of Zn(NH3)2
-        c_ZnNH3_3 = concentration_array[9]      # Concentration of Zn(NH3)3
-        c_ZnNH3_4 = concentration_array[10]     # Concentration of Zn(NH3)4
+        # # Zn with NH3
+        # c_ZnNH3 = concentration_array[7]        # Concentration of Zn(NH3)
+        # c_ZnNH3_2 = concentration_array[8]      # Concentration of Zn(NH3)2
+        # c_ZnNH3_3 = concentration_array[9]      # Concentration of Zn(NH3)3
+        # c_ZnNH3_4 = concentration_array[10]     # Concentration of Zn(NH3)4
 
-        # Zn with OH- and NH3
-        c_ZnNH3OH = concentration_array[11]     # Concentration of Zn(NH3)(OH)
-        c_ZnNH3_2OH = concentration_array[12]   # Concentration of Zn(NH3)2(OH)
-        c_ZnNH3_3OH = concentration_array[13]   # Concentration of Zn(NH3)3(OH)
-        c_ZnNH3_OH_2 = concentration_array[14]  # Concentration of Zn(NH3)(OH)2
-        c_ZnNH3_2OH_2 = concentration_array[15] # Concentration of Zn(NH3)2(OH)2
-        c_ZnNH3OH3 = concentration_array[16]    # Concentration of Zn(NH3)(OH)3
+        # # Zn with OH- and NH3
+        # c_ZnNH3OH = concentration_array[11]     # Concentration of Zn(NH3)(OH)
+        # c_ZnNH3_2OH = concentration_array[12]   # Concentration of Zn(NH3)2(OH)
+        # c_ZnNH3_3OH = concentration_array[13]   # Concentration of Zn(NH3)3(OH)
+        # c_ZnNH3_OH_2 = concentration_array[14]  # Concentration of Zn(NH3)(OH)2
+        # c_ZnNH3_2OH_2 = concentration_array[15] # Concentration of Zn(NH3)2(OH)2
+        # c_ZnNH3OH3 = concentration_array[16]    # Concentration of Zn(NH3)(OH)3
 
-        # NH3 - NH4+
-        c_NH3 = concentration_array[17]         # Concentration of NH3
-        c_NH4 = concentration_array[18]         # Concentration of NH4+
+        # # NH3 - NH4+
+        # c_NH3 = concentration_array[17]         # Concentration of NH3
+        # c_NH4 = concentration_array[18]         # Concentration of NH4+
 
-        # CO2 and H2O
-        c_CO2 = concentration_array[19]         # Concentration of CO2
-        c_H2CO3 = concentration_array[20]       # Concentration of H2CO3
-        c_HCO3_1 = concentration_array[21]      # Concentration of HCO3-
-        c_CO3_2 = concentration_array[22]       # Concentration of CO3^2-
+        # # CO2 and H2O
+        # c_CO2 = concentration_array[19]         # Concentration of CO2
+        # c_H2CO3 = concentration_array[20]       # Concentration of H2CO3
+        # c_HCO3_1 = concentration_array[21]      # Concentration of HCO3-
+        # c_CO3_2 = concentration_array[22]       # Concentration of CO3^2-
 
-        # K+
-        c_K_1 = concentration_array[23]         # Concentration of K+
+        # # K+
+        # c_K_1 = concentration_array[23]         # Concentration of K+
 
-        # H+ and OH-
-        c_H = concentration_array[24]           # Concentration of H+
-        c_OH = concentration_array[25]          # Concentration of OH-
+        # # H+ and OH-
+        # c_H = concentration_array[24]           # Concentration of H+
+        # c_OH = concentration_array[25]          # Concentration of OH-
 
 
-        # Defining total concentrations which describes conservation
-        c_Zn_tot = c_Zn_2 + c_ZnOH4 + c_ZnOH3 + c_ZnOH2 + c_ZnOH + c_ZnO + c_ZnCO3 + c_ZnNH3 + c_ZnNH3_2 + c_ZnNH3_3 + c_ZnNH3_4 + c_ZnNH3OH3  # Total concentration of Zn species
-        c_COx_tot = c_CO2 + c_CO3_2 + c_HCO3_1 + c_H2CO3 + c_ZnCO3
-        c_K_tot = c_K_1 #+ 2*c_K2CO3 + c_KOH
-        c_NHx_tot = c_ZnNH3 + 2*c_ZnNH3_2 + 3*c_ZnNH3_3 + 4*c_ZnNH3_4 + c_NH3 + c_NH4 + c_ZnNH3OH3
+        # Conservation of species
+        c_Zn_tot = concentration_array[26]
+        c_COx_tot = concentration_array[27]
+        c_K_tot = concentration_array[28]
+        c_NHx_tot = concentration_array[29]
 
         ## Conservation equations
         equation_array = np.zeros(4)
@@ -344,7 +363,7 @@ class Zn_solution:
         plt.plot(self.pH_range, self.concentration_matrix[10, : ], linewidth = 3)
         plt.plot(self.pH_range, self.concentration_matrix[17, : ], linewidth = 3)
         plt.plot(self.pH_range, self.concentration_matrix[18, : ], linewidth = 3)
-        plt.hlines(self.NH4OH, min(self.pH_range)-0.75, max(self.pH_range)+0.75, 'k', '--')
+        plt.hlines(self.c_NH4OH, min(self.pH_range)-0.75, max(self.pH_range)+0.75, 'k', '--')
         plt.xlim(min(self.pH_range)-0.75, max(self.pH_range)+0.75)
         plt.title('NHx - ion species')
         plt.xlabel('pH / [-]')
@@ -352,8 +371,28 @@ class Zn_solution:
         plt.legend(['Zn(NH$_{3}$)$^{2+}$', 'Zn(NH$_{3}$)$^{2+}_{2}$', 'Zn(NH$_{3}$)$^{2+}_{3}$', 'Zn(NH$_{3}$)$^{2+}_{4}$', 'NH$_{3}$', 'NH$_{4}^{+}$'])
         plt.show()
 
+    def plot_NHxOHy_species_distribution(self):
+        '''
+        This part plots the concentration distribution for all NHxOHy-species
+        '''
+        # NHxOHy-species
+        plt.figure()
+        plt.plot(self.pH_range, self.concentration_matrix[11, : ], linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[12, : ], linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[13, : ], linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[14, : ], linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[15, : ], linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[16, : ], linewidth = 3)
+        plt.hlines(self.c_NH4OH, min(self.pH_range)-0.75, max(self.pH_range)+0.75, 'k', '--')
+        plt.xlim(min(self.pH_range)-0.75, max(self.pH_range)+0.75)
+        plt.title('NHxOHy - ion species')
+        plt.xlabel('pH / [-]')
+        plt.ylabel('Concentration / [M]')
+        plt.legend(['Zn(NH$_{3}$)(OH)$^{+}$', 'Zn(NH$_{3}$)$_{2}$(OH)$^{+}$', 'Zn(NH$_{3}$)$_{3}$(OH)$^{+}$', 'Zn(NH$_{3}$)(OH)$_{2}$', 'Zn(NH$_{3}$)$_{2}$(OH)$_{2}$', 'Zn(NH$_{3}$)(OH)$_{3}^{-}$'])
+        plt.show()
+
 # Initialize ChemicalEquilibrium
-c_Zn_2_0 = 10**(-4)
+c_Zn_2_0 = 10**(0)
 c_KOH_0 = 6#6
 c_K2CO3_0 = 1.5#1.5
 c_NH4OH_0 = 10**(0)#0.5 --  Check this number, can't be 1.5
@@ -365,3 +404,4 @@ Zn_solution_system.calculate_Zn_solution_concentrations()                   # Ca
 Zn_solution_system.plot_Zn_species_distribution()                           # Plots the Zn-species concentration distribution
 Zn_solution_system.plot_COx_species_distribution()                          # Plots the COx-species concentration distribution
 Zn_solution_system.plot_NHx_species_distribution()                          # Plots the F-species concentration distribution
+Zn_solution_system.plot_NHxOHy_species_distribution()                       # Plots the Zn(NH3)x(OH)y concentration distribution
