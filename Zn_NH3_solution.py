@@ -35,7 +35,7 @@ class Zn_solution:
                                         'Zn(NH3)(OH)': 10**9.23, 'Zn(NH3)2(OH)': 10**10.80, 'Zn(NH3)3(OH)': 10**12,  'Zn(NH3)(OH)2_aq': 10**13, 'Zn(NH3)2(OH)2_aq': 10**13.6, 'Zn(NH3)(OH)3': 10**14.50,\
                                         'ZnOH2_sat': 10**(-14.82), 'ZnO': 10**(-15.96), 'ZnCO3': 10**(-10), \
                                         'H2CO3': 10**(6.33), 'HCO3': 10**(9.56), 'pCO2': 10**(-1.55),\
-                                        'NH3': 10**(9.32-13.96)}  # Initialize with a non-zero value
+                                        'NH3': 10**(-9.246)}  # Initialize with a non-zero value
         
         #'CO3': 10**(-2.0), , 'H2O': 10**4.18, 'KOH': 10**(-0.2)
         
@@ -118,7 +118,7 @@ class Zn_solution:
         c_CO2 = c_H2CO3*K_CO2                      # Formation of CO2 from H2CO3
 
         # Ammonia - Ammonium
-        c_NH3 = (c_NH4*c_OH)/K_NH3                  # Formation of NH3 from NH4
+        c_NH3 = (c_NH4*K_NH3)/c_H                  # Formation of NH3 from NH4
 
         # Carbonates from salts
         c_ZnCO3 = c_CO3_2*c_Zn_2*K_ZnCO3            # Formation of ZnCO3
@@ -273,13 +273,22 @@ class Zn_solution:
         '''
 
         for i in range(len(self.pH_range)):
-            c_Zn_2_0, c_CO3_2_0, c_K_1_0, c_NH4OH_0 = self.c_Zn_tot, self.c_COx_tot, self.c_K_tot, self.c_NHx_tot
+            if i == 0:
+                c_Zn_2_0, c_CO3_2_0, c_K_1_0, c_NH4OH_0 = self.c_Zn_tot, self.c_COx_tot, self.c_K_tot, self.c_NHx_tot
 
-            x0 = np.array([c_Zn_2_0, c_CO3_2_0, c_K_1_0, c_NH4OH_0])
-            options = {'maxfev': 20000, 'xtol': 10**(-8)}
-            x = fsolve(lambda x: self.conservation_Zn_solution(x, self.pH_range[i]), x0, **options)
+                x0 = np.array([c_Zn_2_0, c_CO3_2_0, c_K_1_0, c_NH4OH_0])
+                options = {'maxfev': 20000, 'xtol': 10**(-8)}
+                x = fsolve(lambda x: self.conservation_Zn_solution(x, self.pH_range[i]), x0, **options)
 
-            self.concentration_matrix[:,i] = self.distribute_Zn_solution_species(x, self.pH_range[i])
+                self.concentration_matrix[:,i] = self.distribute_Zn_solution_species(x, self.pH_range[i])
+            else:
+                c_Zn_2_0, c_CO3_2_0, c_K_1_0, c_NH4OH_0 = self.concentration_matrix[0, i-1], self.concentration_matrix[22, i-1], self.concentration_matrix[23, i-1], self.concentration_matrix[18, i-1]
+
+                x0 = np.array([c_Zn_2_0, c_CO3_2_0, c_K_1_0, c_NH4OH_0])
+                options = {'maxfev': 20000, 'xtol': 10**(-8)}
+                x = fsolve(lambda x: self.conservation_Zn_solution(x, self.pH_range[i]), x0, **options)
+
+                self.concentration_matrix[:,i] = self.distribute_Zn_solution_species(x, self.pH_range[i])
 
     def plot_Zn_species_distribution(self):
         '''
@@ -344,10 +353,10 @@ class Zn_solution:
         plt.show()
 
 # Initialize ChemicalEquilibrium
-c_Zn_2_0 = 10**(-6)
+c_Zn_2_0 = 10**(-4)
 c_KOH_0 = 6#6
 c_K2CO3_0 = 1.5#1.5
-c_NH4OH_0 = 10**(-7)#0.5 --  Check this number, can't be 1.5
+c_NH4OH_0 = 10**(0)#0.5 --  Check this number, can't be 1.5
 
 # Initialises and solving the system
 initial_concentrations = np.array([c_Zn_2_0, c_KOH_0, c_K2CO3_0, c_NH4OH_0])   # Initial concentrations
@@ -356,6 +365,3 @@ Zn_solution_system.calculate_Zn_solution_concentrations()                   # Ca
 Zn_solution_system.plot_Zn_species_distribution()                           # Plots the Zn-species concentration distribution
 Zn_solution_system.plot_COx_species_distribution()                          # Plots the COx-species concentration distribution
 Zn_solution_system.plot_NHx_species_distribution()                          # Plots the F-species concentration distribution
-
-print(Zn_solution_system.concentration_matrix[17,:])
-print(Zn_solution_system.concentration_matrix[7,:])
