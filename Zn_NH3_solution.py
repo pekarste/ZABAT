@@ -287,21 +287,20 @@ class Zn_solution:
         # plt.plot(self.pH_range, np.log10(self.concentration_matrix[16, : ]), linewidth = 1.5)
         # plt.plot(self.pH_range, np.log10(self.concentration_matrix[24, :]), linewidth = 1.5, color='k') # Legend: 'H$^{+}$'
         # plt.plot(self.pH_range, np.log10(self.concentration_matrix[25, :]), linewidth = 1.5, color='k') # Legend: 'OH$^{-}$'
-        plt.plot(self.pH_range, (self.concentration_matrix[0, : ]), linewidth = 3)
-        plt.plot(self.pH_range, (self.concentration_matrix[1, : ]), linewidth = 3)
-        plt.plot(self.pH_range, (self.concentration_matrix[2, : ]), linewidth = 3)
-        plt.plot(self.pH_range, (self.concentration_matrix[3, : ]), linewidth = 3)
-        plt.plot(self.pH_range, (self.concentration_matrix[4, : ]), linewidth = 3)
-        plt.plot(self.pH_range, (self.concentration_matrix[5, : ]), linewidth = 3)
-        plt.plot(self.pH_range, (self.concentration_matrix[6, : ]), linewidth = 3)
-        plt.plot(self.pH_range, (self.concentration_matrix[16, : ]), linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[0, : ], label='Zn$^{2+}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[1, : ], label='Zn(OH)$_{4}^{2-}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[2, : ], label='Zn(OH)$_{3}^{-}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[3, : ], label='Zn(OH)$_{2}$ (aq)', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[4, : ], label='Zn(OH)$^{+}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[5, : ], label='ZnO', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[6, : ], label='ZnCO$_{3}$', linewidth = 3)
         plt.hlines(self.c_Zn_2, min(self.pH_range)-0.75, max(self.pH_range)+.75, 'k', '--')
         plt.xlim(min(self.pH_range)-0.75, max(self.pH_range)+0.75)
         #plt.ylim(-20, 1)
         plt.title('Zn - ion species')
         plt.xlabel('pH / [-]')
         plt.ylabel('Concentration / [M]')
-        plt.legend(['Zn$^{2+}$', 'Zn(OH)$_{4}^{2-}$', 'Zn(OH)$_{3}^{-}$', 'Zn(OH)$_{2}$ (aq)', 'Zn(OH)$^{+}$', 'ZnO', 'ZnCO$_{3}$', 'Zn(NH$_{3}$)(OH)$_{3}$'])
+        plt.legend()
         plt.show()
 
     def plot_COx_species_distribution(self):
@@ -310,10 +309,10 @@ class Zn_solution:
         '''
         # Carbonates
         plt.figure()
-        plt.plot(self.pH_range, self.concentration_matrix[19, : ], linewidth = 3)
-        plt.plot(self.pH_range, self.concentration_matrix[20, : ], linewidth = 3)
-        plt.plot(self.pH_range, self.concentration_matrix[21, : ], linewidth = 3)
-        plt.plot(self.pH_range, self.concentration_matrix[22, : ], linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[19, : ], label='CO$_{2}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[20, : ], label='H$_{2}$CO_$_{3}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[21, : ], label='HCO$_{3}^{-}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[22, : ], label='CO$_{3}^{2-}$', linewidth = 3)
         plt.hlines(self.c_K2CO3, min(self.pH_range)-0.75, max(self.pH_range)+0.75, 'k', '--')
         plt.xlim(min(self.pH_range)-0.75, max(self.pH_range)+0.75)
         plt.title('COx - species')
@@ -328,18 +327,18 @@ class Zn_solution:
         '''
         # NHx-species
         plt.figure()
-        plt.plot(self.pH_range, self.concentration_matrix[7, : ], linewidth = 3)
-        plt.plot(self.pH_range, self.concentration_matrix[8, : ], linewidth = 3)
-        plt.plot(self.pH_range, self.concentration_matrix[9, : ], linewidth = 3)
-        plt.plot(self.pH_range, self.concentration_matrix[10, : ], linewidth = 3)
-        plt.plot(self.pH_range, self.concentration_matrix[17, : ], linewidth = 3)
-        plt.plot(self.pH_range, self.concentration_matrix[18, : ], linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[7, : ], label='Zn(NH$_{3}$)$^{2+}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[8, : ], label='Zn(NH$_{3}$)$^{2+}_{2}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[9, : ], label='Zn(NH$_{3}$)$^{2+}_{3}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[10, : ], label='Zn(NH$_{3}$)$^{2+}_{4}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[17, : ], label='NH$_{3}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[18, : ], label='NH$_{4}^{+}$', linewidth = 3)
         plt.hlines(self.c_NH4OH, min(self.pH_range)-0.75, max(self.pH_range)+0.75, 'k', '--')
         plt.xlim(min(self.pH_range)-0.75, max(self.pH_range)+0.75)
         plt.title('NHx - ion species')
         plt.xlabel('pH / [-]')
         plt.ylabel('Concentration / [M]')
-        plt.legend(['Zn(NH$_{3}$)$^{2+}$', 'Zn(NH$_{3}$)$^{2+}_{2}$', 'Zn(NH$_{3}$)$^{2+}_{3}$', 'Zn(NH$_{3}$)$^{2+}_{4}$', 'NH$_{3}$', 'NH$_{4}^{+}$'])
+        plt.legend()
         plt.show()
 
     def plot_NHxOHy_species_distribution(self):
@@ -348,18 +347,18 @@ class Zn_solution:
         '''
         # NHxOHy-species
         plt.figure()
-        plt.plot(self.pH_range, self.concentration_matrix[11, : ], linewidth = 3)
-        plt.plot(self.pH_range, self.concentration_matrix[12, : ], linewidth = 3)
-        plt.plot(self.pH_range, self.concentration_matrix[13, : ], linewidth = 3)
-        plt.plot(self.pH_range, self.concentration_matrix[14, : ], linewidth = 3)
-        plt.plot(self.pH_range, self.concentration_matrix[15, : ], linewidth = 3)
-        plt.plot(self.pH_range, self.concentration_matrix[16, : ], linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[11, : ], label='Zn(NH$_{3}$)(OH)$^{+}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[12, : ], label='Zn(NH$_{3}$)$_{2}$(OH)$^{+}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[13, : ], label='Zn(NH$_{3}$)$_{3}$(OH)$^{+}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[14, : ], label='Zn(NH$_{3}$)(OH)$_{2}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[15, : ], label='Zn(NH$_{3}$)$_{2}$(OH)$_{2}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[16, : ], label='Zn(NH$_{3}$)(OH)$_{3}^{-}$', linewidth = 3)
         plt.hlines(self.c_NH4OH, min(self.pH_range)-0.75, max(self.pH_range)+0.75, 'k', '--')
         plt.xlim(min(self.pH_range)-0.75, max(self.pH_range)+0.75)
         plt.title('NHxOHy - ion species')
         plt.xlabel('pH / [-]')
         plt.ylabel('Concentration / [M]')
-        plt.legend(['Zn(NH$_{3}$)(OH)$^{+}$', 'Zn(NH$_{3}$)$_{2}$(OH)$^{+}$', 'Zn(NH$_{3}$)$_{3}$(OH)$^{+}$', 'Zn(NH$_{3}$)(OH)$_{2}$', 'Zn(NH$_{3}$)$_{2}$(OH)$_{2}$', 'Zn(NH$_{3}$)(OH)$_{3}^{-}$'])
+        plt.legend()
         plt.show()
     def plot_Zn_tot(self):
         '''
@@ -374,12 +373,73 @@ class Zn_solution:
         plt.xlabel('pH / [-]')
         plt.ylabel('Log( C ) / [-]')
         plt.show()
+    
+    def plot_Zn_fractional_species(self):
+        plt.figure()
+        plt.plot(self.pH_range, self.concentration_matrix[0, : ]/self.concentration_matrix[26, : ], label='Zn$^{2+}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[1, : ]/self.concentration_matrix[26, : ], label='Zn(OH)$_{4}^{2-}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[2, : ]/self.concentration_matrix[26, : ], label='Zn(OH)$_{3}^{-}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[3, : ]/self.concentration_matrix[26, : ], label='Zn(OH)$_{2}$ (aq)', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[4, : ]/self.concentration_matrix[26, : ], label='Zn(OH)$^{+}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[5, : ]/self.concentration_matrix[26, : ], label='ZnO', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[6, : ]/self.concentration_matrix[26, : ], label='ZnCO$_{3}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[7, : ]/self.concentration_matrix[26, : ], label='Zn(NH$_{3}$)$^{2+}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[8, : ]/self.concentration_matrix[26, : ], label='Zn(NH$_{3}$)$^{2+}_{2}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[9, : ]/self.concentration_matrix[26, : ], label='Zn(NH$_{3}$)$^{2+}_{3}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[10, : ]/self.concentration_matrix[26, : ], label='Zn(NH$_{3}$)$^{2+}_{4}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[11, : ]/self.concentration_matrix[26, : ], label='Zn(NH$_{3}$)(OH)$^{+}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[12, : ]/self.concentration_matrix[26, : ], label='Zn(NH$_{3}$)$_{2}$(OH)$^{+}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[13, : ]/self.concentration_matrix[26, : ], label='Zn(NH$_{3}$)$_{3}$(OH)$^{+}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[14, : ]/self.concentration_matrix[26, : ], label='Zn(NH$_{3}$)(OH)$_{2}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[15, : ]/self.concentration_matrix[26, : ], label='Zn(NH$_{3}$)$_{2}$(OH)$_{2}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[16, : ]/self.concentration_matrix[26, : ], label='Zn(NH$_{3}$)(OH)$_{3}^{-}$', linewidth = 3)
+        plt.title('Zn - ion species (fractions)')
+        plt.xlabel('pH / [-]')
+        plt.ylabel('Zn fraction / [-]')
+        #plt.legend()
+        plt.show()
+
+    def plot_COx_fractional_species(self):
+        plt.figure()
+        plt.plot(self.pH_range, self.concentration_matrix[19, : ]/self.concentration_matrix[27, : ], label='CO$_{2}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[20, : ]/self.concentration_matrix[27, : ], label='H$_{2}$CO_$_{3}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[21, : ]/self.concentration_matrix[27, : ], label='HCO$_{3}^{-}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[22, : ]/self.concentration_matrix[27, : ], label='CO$_{3}^{2-}$', linewidth = 3)
+        plt.hlines(1, min(self.pH_range)-0.75, max(self.pH_range)+0.75, 'k', '--')
+        plt.xlim(min(self.pH_range)-0.75, max(self.pH_range)+0.75)
+        plt.title('COx - species (Fraction)')
+        plt.xlabel('pH / [-]')
+        plt.ylabel('Concentration / [M]')
+        plt.legend()
+        plt.show()
+
+    def plot_NHx_fractional_species(self):
+        plt.figure()
+        plt.plot(self.pH_range, self.concentration_matrix[7, : ]/self.concentration_matrix[29, : ], label='Zn(NH$_{3}$)$^{2+}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[8, : ]/self.concentration_matrix[29, : ], label='Zn(NH$_{3}$)$^{2+}_{2}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[9, : ]/self.concentration_matrix[29, : ], label='Zn(NH$_{3}$)$^{2+}_{3}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[10, : ]/self.concentration_matrix[29, : ], label='Zn(NH$_{3}$)$^{2+}_{4}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[11, : ]/self.concentration_matrix[29, : ], label='Zn(NH$_{3}$)(OH)$^{+}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[12, : ]/self.concentration_matrix[29, : ], label='Zn(NH$_{3}$)$_{2}$(OH)$^{+}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[13, : ]/self.concentration_matrix[29, : ], label='Zn(NH$_{3}$)$_{3}$(OH)$^{+}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[14, : ]/self.concentration_matrix[29, : ], label='Zn(NH$_{3}$)(OH)$_{2}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[15, : ]/self.concentration_matrix[29, : ], label='Zn(NH$_{3}$)$_{2}$(OH)$_{2}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[16, : ]/self.concentration_matrix[29, : ], label='Zn(NH$_{3}$)(OH)$_{3}^{-}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[17, : ]/self.concentration_matrix[29, : ], label='NH$_{3}$', linewidth = 3)
+        plt.plot(self.pH_range, self.concentration_matrix[18, : ]/self.concentration_matrix[29, : ], label='NH$_{4}^{+}$', linewidth = 3)
+        plt.hlines(1, min(self.pH_range)-0.75, max(self.pH_range)+0.75, 'k', '--')
+        plt.xlim(min(self.pH_range)-0.75, max(self.pH_range)+0.75)
+        plt.title('NHx - species (Fraction)')
+        plt.xlabel('pH / [-]')
+        plt.ylabel('Concentration / [M]')
+        plt.legend()
+        plt.show()
 
 # Initialize ChemicalEquilibrium
-c_Zn_2_0 = 10**(0)
+c_Zn_2_0 = 10**(1)
 c_KOH_0 = 6#6
 c_K2CO3_0 = 1.5#1.5
-c_NH4OH_0 = 10**(-16)#0.5 --  Check this number, can't be higher than 10^-7 with dictionary 2 and can't be higher than 10^-4 with dictionary 1
+c_NH4OH_0 = 10**(0)#0.5 --  Check this number, can't be higher than 10^-7 with dictionary 2 and can't be higher than 10^-4 with dictionary 1
 
 # Initialises and solving the system
 initial_concentrations = np.array([c_Zn_2_0, c_KOH_0, c_K2CO3_0, c_NH4OH_0])   # Initial concentrations
@@ -389,6 +449,7 @@ Zn_solution_system.plot_Zn_species_distribution()                           # Pl
 Zn_solution_system.plot_COx_species_distribution()                          # Plots the COx-species concentration distribution
 Zn_solution_system.plot_NHx_species_distribution()                          # Plots the Zn(NH3)x concentration distribution
 Zn_solution_system.plot_NHxOHy_species_distribution()                       # Plots the Zn(NH3)x(OH)y concentration distribution
-Zn_solution_system.plot_Zn_tot()
-#print(Zn_solution_system.concentration_matrix[17,:])
-#print(Zn_solution_system.concentration_matrix[7,:])
+#Zn_solution_system.plot_Zn_tot()
+Zn_solution_system.plot_Zn_fractional_species()
+Zn_solution_system.plot_COx_fractional_species()
+Zn_solution_system.plot_NHx_fractional_species()
