@@ -11,14 +11,14 @@ constants = {
 
 # E0 constants
 constants_E0 = {
-'EI_0': -0.76,      # [V]
-'EII_0': 0.2,       # [V]
-'EIII_0': -0.4225,  # [V], assumed solid phase, not aq.
-'EIV_0': -0.1,      # [V]
-'EV_0': 0.278,      # [V]
-'EVI_0': 1,         # [V]
-'EHER_0': 0,        # [V]
-'EOER_0': 1.23      # [V]
+'EI_0': -0.76,      # [V] - Zn^2+(aq) --> Zn(s)
+'EII_0': 0.2,       # [V] - Zn(OH)^+ --> Zn(s) 
+'EIII_0': -0.4225,  # [V] - Zn(OH)2(s) --> Zn(s) -  assumed solid phase, not aq.
+'EIV_0': -0.1,      # [V] - Zn(OH)3^- --> Zn(s)
+'EV_0': 0.278,      # [V] - Zn(OH)4^2- --> Zn(s)
+'EVI_0': 1,         # [V] - ZnO --> Zn(s)
+'EHER_0': 0,        # [V] - HER
+'EOER_0': 1.23      # [V] -  OER
 }
 
 # deltaG constants
@@ -29,8 +29,8 @@ constants_deltaG = {
 }
 
 # Plotting
-# pH range
-pH = np.arange(0, 16, 0.01)     # pH range
+
+pH = np.arange(0, 17, 0.01)     # pH range
 EHER = constants_E0['EHER_0'] - 2*constants['R']*constants['T']/(constants['n']*constants['F'])*np.log(10)*pH   # HER
 EOER = constants_E0['EOER_0'] - 2*constants['R']*constants['T']/(constants['n']*constants['F'])*np.log(10)*pH   # OER
 slope = -2*constants['R']*constants['T']/(constants['n']*constants['F'])*np.log(10)
@@ -49,11 +49,11 @@ for i in range(len(pZn_values)):
 
     # Concentration constants
     constants_p = {             # Setting all values to be the same
-    'pZn': pZn_values[i],
-    'pZnOH': pZn_values[i],
-    'pZnOH2': pZn_values[i],
-    'pZnOH3': pZn_values[i],
-    'pZnOH4': pZn_values[i]
+    'pZn': pZn_values[i],       # pZn = -log(Zn^2+)
+    'pZnOH': pZn_values[i],     # pZnOH = -log(Zn(OH)^+)
+    'pZnOH2': pZn_values[i],    # pZnOH2 = -log(Zn(OH)2)
+    'pZnOH3': pZn_values[i],    # pZnOH3 = -log(Zn(OH)3^-)
+    'pZnOH4': pZn_values[i]     # pZnOH4 = -log(Zn(OH)4^-2)
     }
 
     # E calculations
@@ -66,7 +66,7 @@ for i in range(len(pZn_values)):
     EII = constants_E0['EII_0'] - constants['R']*constants['T']*np.log(10)/(constants['n']*constants['F'])*(constants_p['pZnOH']+pH)
 
     # Zn(OH)2 --> Zn(s)
-    EIII = constants_E0['EIII_0'] - constants['R']*constants['T']*np.log(10)/(constants['n']*constants['F'])*(0*constants_p['pZnOH2']+2*pH)
+    EIII = constants_E0['EIII_0'] - 2*constants['R']*constants['T']*np.log(10)/(constants['n']*constants['F'])*(0*constants_p['pZnOH2']/2+pH)
 
     # Zn(OH)3^- --> Zn(s)
     EIV = constants_E0['EIV_0'] - constants['R']*constants['T']*np.log(10)/(constants['n']*constants['F'])*(constants_p['pZnOH3']+3*pH)
@@ -88,19 +88,20 @@ for i in range(len(pZn_values)):
     # Zn(OH)3^- --> Zn(OH)4^2-
     pHX = 14 + constants_deltaG['deltaG_X']/(constants['R']*constants['T']*np.log(10)) + constants_p['pZnOH3'] - constants_p['pZnOH4']
 
-    index_I_III = np.where(EI <= EIII)[0][-1] if np.any(EI <= EIII) else None
-    index_III_IV = np.where(EIII <= EIV)[0][-1] if np.any(EIII <= EIV) else None
-    index_IV_V = np.where(EIV <= EV)[0][-1] if np.any(EIV <= EV) else None
+    # Since we have to decide some lines in order to get a cleaner plot, we decide the pH intersections from the sloped lines
+    index_I_III = np.where(EI <= EIII)[0][-1] if np.any(EI <= EIII) else None       # Finds the closest intersection between EI and EIII 
+    index_III_IV = np.where(EIII <= EIV)[0][-1] if np.any(EIII <= EIV) else None    # Finds the closest intersection between EIII and EIV
+    index_IV_V = np.where(EIV <= EV)[0][-1] if np.any(EIV <= EV) else None          # Finds the closest intersection between EIV and EV
 
     # For å fikse unøyaktige skjæringspunkter kan man enten sjekke om man kan indeksere gjennom pH, eller gjøre linjestørrelsen litt tykkere
 
     plt.plot(pH[:index_I_III], EI[:index_I_III], 'k', label='Zn$^{2+}$ - Zn')
-    #plt.plot(pH, E_Zn_Zn2, 'g', label='Zn$^{2+}$ - Zn')
+    #plt.vlines(pHVIII, -1.5, 1.5, 'k', label='Zn$^{2+}$ - Zn')
     #plt.plot(pH, EII,'k', label='Zn(OH)$^+$ - Zn')
     plt.plot(pH[index_I_III: index_III_IV], EIII[index_I_III: index_III_IV], 'c', label='Zn(OH)$_2$ - Zn')
     plt.plot(pH[index_III_IV:index_IV_V], EIV[index_III_IV:index_IV_V], 'r', label='Zn(OH)$_3^-$ - Zn')
     plt.plot(pH[index_IV_V:], EV[index_IV_V:], 'm', label='Zn(OH)$_4^{2-}$ - Zn')
-    plt.vlines(pH[index_I_III], EI[index_I_III], 1.5, 'k', label = 'pH = ')
+    plt.vlines(pH[index_I_III], EI[index_I_III], 1.5, 'c', label = 'pH = ')
     #plt.vlines(pHIX, -1.5, 1.5, 'k', label='Zn(OH)$_{2}$ - Zn(OH)$_3^-$')
     plt.vlines(pH[index_III_IV], EIII[index_III_IV], 1.5, 'r', label='test2')
     #plt.vlines(pHX, -1.5, 1.5, 'k', label='Zn(OH)$_{3}^-$ - Zn(OH)$_4^{2-}$')
@@ -124,3 +125,9 @@ plt.ylabel('Potential [V]')
 plt.xlim(xmin=0, xmax=max(pH))  # Set the x-axis range
 plt.ylim(ymin=-1.5, ymax=1.5)
 plt.show()
+
+
+'''
+Comment:
+We have used Erbe's notes, and the Pourbaix notes to fill in each other, while in reality there are differences that should be considered. I am convinced that by using one or the other we are bound to fix the issues
+'''
