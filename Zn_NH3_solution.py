@@ -328,8 +328,8 @@ class Zn_solution:
         plt.hlines(self.c_Zn_2, min(self.pH_range)-0.75, max(self.pH_range)+.75, 'k', '--')
         plt.xlim(min(self.pH_range)-0.75, max(self.pH_range)+0.75)
         plt.title('Zn - ion species')
-        plt.xlabel('pH / [-]')
-        plt.ylabel('Concentration / [M]')
+        plt.xlabel('pH  /  -')
+        plt.ylabel('Concentration - c /  M')
         plt.legend()#, 'ZnNH3_3'])
         plt.show()
 
@@ -346,8 +346,8 @@ class Zn_solution:
         plt.hlines(self.c_K2CO3, min(self.pH_range)-0.75, max(self.pH_range)+0.75, 'k', '--')
         plt.xlim(min(self.pH_range)-0.75, max(self.pH_range)+0.75)
         plt.title('COx - species')
-        plt.xlabel('pH / [-]')
-        plt.ylabel('Concentration / [M]')
+        plt.xlabel('pH  /  -')
+        plt.ylabel('Concentration - c  / M')
         plt.legend()
         plt.show()
 
@@ -366,8 +366,8 @@ class Zn_solution:
         plt.hlines(self.c_NH4OH, min(self.pH_range)-0.75, max(self.pH_range)+0.75, 'k', '--')
         plt.xlim(min(self.pH_range)-0.75, max(self.pH_range)+0.75)
         plt.title('NHx - ion species')
-        plt.xlabel('pH / [-]')
-        plt.ylabel('Concentration / [M]')
+        plt.xlabel('pH  /  -')
+        plt.ylabel('Concentration - c  /  M')
         plt.legend()
         plt.show()
 
@@ -383,19 +383,58 @@ class Zn_solution:
         plt.plot(self.pH_range, self.concentration_matrix[14, : ], label='Zn(NH$_{3}$)(OH)$_{2}$', linewidth = 3)
         plt.plot(self.pH_range, self.concentration_matrix[15, : ], label='Zn(NH$_{3}$)$_{2}$(OH)$_{2}$', linewidth = 3)
         plt.plot(self.pH_range, self.concentration_matrix[16, : ], label='Zn(NH$_{3}$)(OH)$_{3}^{-}$', linewidth = 3)
-        plt.hlines(self.c_NH4OH, min(self.pH_range)-0.75, max(self.pH_range)+0.75, 'k', '--')
+        #plt.hlines(self.c_NH4OH, min(self.pH_range)-0.75, max(self.pH_range)+0.75, 'k', '--')
         plt.xlim(min(self.pH_range)-0.75, max(self.pH_range)+0.75)
         plt.title('NHxOHy - ion species')
-        plt.xlabel('pH / [-]')
-        plt.ylabel('Concentration / [M]')
+        plt.xlabel('pH  /  - ')
+        plt.ylabel('Concentration - c  /  M')
         plt.legend()
         plt.show()
 
+    def plot_Zn_tot_distribution(self):
+        plt.figure()
+        # Zn^2+
+        plt.plot(self.pH_range, self.concentration_matrix[0, : ], label='Zn$^{2+}$', linewidth = 2, linestyle='solid')
+        # Zn(OH)x
+        plt.plot(self.pH_range, self.concentration_matrix[1, : ], label='Zn(OH)$_{4}^{2-}$', linewidth = 2)
+        plt.plot(self.pH_range, self.concentration_matrix[2, : ], label='Zn(OH)$_{3}^{-}$', linewidth = 2)
+        plt.plot(self.pH_range, self.concentration_matrix[3, : ], label='Zn(OH)$_{2}$ (aq)', linewidth = 2)
+        plt.plot(self.pH_range, self.concentration_matrix[4, : ], label='Zn(OH)$^{+}$', linewidth = 2)
+        plt.plot(self.pH_range, self.concentration_matrix[5, : ], label='ZnO', linewidth = 3)              # Relatively small
+        # ZnCO3
+        plt.plot(self.pH_range, self.concentration_matrix[6, : ], label='ZnCO$_{3}$', linewidth = 3)       # Relatively small
+        # Zn(NH3)x
+        plt.plot(self.pH_range, self.concentration_matrix[7, : ], label='Zn(NH$_{3}$)$^{2+}$', linewidth = 2, linestyle = 'dotted')
+        plt.plot(self.pH_range, self.concentration_matrix[8, : ], label='Zn(NH$_{3}$)$^{2+}_{2}$', linewidth = 2, linestyle = 'dotted')
+        plt.plot(self.pH_range, self.concentration_matrix[9, : ], label='Zn(NH$_{3}$)$^{2+}_{3}$', linewidth = 2, linestyle = 'dotted')
+        plt.plot(self.pH_range, self.concentration_matrix[10, : ], label='Zn(NH$_{3}$)$^{2+}_{4}$', linewidth = 2, linestyle = 'dotted')
+        # NH3
+        #plt.plot(self.pH_range, self.concentration_matrix[17, : ], label='NH$_{3}$', linewidth = 2, linestyle = 'dotted')
+        # NH4
+        #plt.plot(self.pH_range, self.concentration_matrix[18, : ], label='NH$_{4}^{+}$', linewidth = 2, linestyle = 'dotted')
+        # Zn(NH3)x(OH)y
+        plt.plot(self.pH_range, self.concentration_matrix[11, : ], label='Zn(NH$_{3}$)(OH)$^{+}$', linewidth = 2, linestyle = 'dashed')
+        plt.plot(self.pH_range, self.concentration_matrix[12, : ], label='Zn(NH$_{3}$)$_{2}$(OH)$^{+}$', linewidth = 2, linestyle = 'dashed')
+        plt.plot(self.pH_range, self.concentration_matrix[13, : ], label='Zn(NH$_{3}$)$_{3}$(OH)$^{+}$', linewidth = 2, linestyle = 'dashed')
+        plt.plot(self.pH_range, self.concentration_matrix[14, : ], label='Zn(NH$_{3}$)(OH)$_{2}$', linewidth = 2, linestyle = 'dashed')
+        plt.plot(self.pH_range, self.concentration_matrix[15, : ], label='Zn(NH$_{3}$)$_{2}$(OH)$_{2}$', linewidth = 2, linestyle = 'dashed')
+        plt.plot(self.pH_range, self.concentration_matrix[16, : ], label='Zn(NH$_{3}$)(OH)$_{3}^{-}$', linewidth = 3)# Relatively small
+        plt.xlim(min(self.pH_range)-0.75, max(self.pH_range)+0.75)
+        plt.title('Zn total distribution')
+        plt.xlabel('pH  /  -')
+        plt.ylabel('Concentration - c  / M')
+        plt.legend()
+        plt.tight_layout()
+        plt.show()
+
+
 # Initialize ChemicalEquilibrium
-c_Zn_2_0 = 10**(0)
+c_Zn_2_0 = 10**(-1)
 c_KOH_0 = 6#6
 c_K2CO3_0 = 1.5#1.5
-c_NH4OH_0 = 10**(0)#0.5 --  Check this number, can't be 1.5
+c_NH4OH_0 = 1.5*10**(0)#0.5 --  Check this number, can't be 1.5
+
+pZn = -np.log10(c_Zn_2_0)
 
 # Initialises and solving the system
 initial_concentrations = np.array([c_Zn_2_0, c_KOH_0, c_K2CO3_0, c_NH4OH_0])   # Initial concentrations
@@ -405,3 +444,6 @@ Zn_solution_system.plot_Zn_species_distribution()                           # Pl
 Zn_solution_system.plot_COx_species_distribution()                          # Plots the COx-species concentration distribution
 Zn_solution_system.plot_NHx_species_distribution()                          # Plots the F-species concentration distribution
 Zn_solution_system.plot_NHxOHy_species_distribution()                       # Plots the Zn(NH3)x(OH)y concentration distribution
+Zn_solution_system.plot_Zn_tot_distribution()                               # Plots the total distribution of Zn containing species
+
+print(f'pZn = {pZn}')
