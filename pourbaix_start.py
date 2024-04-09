@@ -182,8 +182,8 @@ for i in range(len(pZn_values)):
         plt.text(14, -0.55, 'Zn(OH)$^{2-}_{4}$(aq)', fontsize=12, color='black', rotation=90)   # Zn(OH)4^2- domain
         plt.text(8, 0.0, 'Zn(OH)$_2$(s)', fontsize=12, color='black', rotation=90)              # Zn(OH)2 domain
 
-plt.xlabel('pH')
-plt.ylabel('Potential [V]')
+plt.xlabel('pH  /  []')
+plt.ylabel('Potential - E  /  V')
 plt.xlim(xmin=0, xmax=max(pH))  # Set the x-axis range
 plt.ylim(ymin=-1.5, ymax=1.5)
 plt.show()
