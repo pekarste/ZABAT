@@ -194,8 +194,6 @@ pH_neutral = (1/2)*pKw
 pH = np.arange(0, 16, 0.01)     # pH range
 
 # Defining the lines for the HER and OER
-# EHER = E0_new['EHER_0'] - 2*constants['R']*T/(constants['n']*constants['F'])*np.log(10)*pH   # HER
-# EOER = E0_new['EOER_0'] - 2*constants['R']*T/(constants['n']*constants['F'])*np.log(10)*pH   # OER
 slope = - 2*constants['R']*T/(constants['n']*constants['F'])*np.log(10)
 EHER = E_OER_HER(E_0 = E0_new['EHER_0'], slope = - 2*constants['R']*T/(constants['n']*constants['F'])*np.log(10), pH=pH)   # HER
 EOER = E_OER_HER(E_0 = E0_new['EOER_0'], slope = - 2*constants['R']*T/(constants['n']*constants['F'])*np.log(10), pH=pH)   # OER
