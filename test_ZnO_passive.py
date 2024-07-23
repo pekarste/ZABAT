@@ -15,8 +15,9 @@ import numpy as np
 from Functions.Functions import vant_Hoff, deltaG_weak, deltaG_T2, E0_2, add_polygon, E_OER_HER
 from Data.thermodynamic_data import *   # Imports all the thermodynamic data as well as the constants
 
-T = 25+273.15           # [K] - Temperature
-
+T = 85+273.15           # [K] - Temperature
+# Concentration of Zn ions
+pZn_value = 6     # Activity of dissolved Zn - pZn = -log(c_Zn) --- Maximum value is 6 and minimum value is 0
 ################################ THERMODYNAMIC DATA AT DIFFERENT TEMPERATURES ################################
 
 ## Gibbs free energy using no assumptions, except that the heat capacities are valid in this range
@@ -209,9 +210,6 @@ pH = np.arange(0, 16, 0.01)     # pH range
 slope = - 2*constants['R']*T/(constants['n']*constants['F'])*np.log(10)
 EHER = E_OER_HER(E_0 = E0_new['EHER_0'], slope = - 2*constants['R']*T/(constants['n']*constants['F'])*np.log(10), pH=pH)   # HER
 EOER = E_OER_HER(E_0 = E0_new['EOER_0'], slope = - 2*constants['R']*T/(constants['n']*constants['F'])*np.log(10), pH=pH)   # OER
-
-# Concentration of Zn ions
-pZn_value = 3     # Values we iterate through for the activity of dissolved Zn - pZn = -log(c_Zn) --- Maximum value is 6 and minimum value is 0
 
 pZn_values_dict = {'pZn': pZn_value}   # Dictionary with values
 linestyle = ['-', '--']
