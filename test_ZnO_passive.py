@@ -199,7 +199,7 @@ EHER = E_OER_HER(E_0 = E0_new['EHER_0'], slope = - 2*constants['R']*T/(constants
 EOER = E_OER_HER(E_0 = E0_new['EOER_0'], slope = - 2*constants['R']*T/(constants['n']*constants['F'])*np.log(10), pH=pH)   # OER
 
 # Concentration of Zn ions
-pZn_value = 5.8      # Values we iterate through for the activity of dissolved Zn - pZn = -log(c_Zn) --- Maximum value is 6 and minimum value is 0
+pZn_value = 5.8     # Values we iterate through for the activity of dissolved Zn - pZn = -log(c_Zn) --- Maximum value is 6 and minimum value is 0
 
 pZn_values_dict = {'pZn': pZn_value}   # Dictionary with values
 linestyle = ['-', '--']
@@ -344,7 +344,7 @@ if pZn_value < pZn_threshold_ox:
 
     # Adding text to different domains --> Should be adjusted later
     #ax.text(5, -1.25, 'Zn(s)', fontsize=12, color='black')                                 # Zn domain
-    ax.text(np.mean([np.min(pH), pHVIII_ox])-1.2,
+    ax.text(np.min([np.mean([np.min(pH), pH_neutral]), np.mean([np.min(pH), pHVIII_ox])])-1,
             np.mean([E_OER_HER(E0_new['EHER_0'], slope ,pH=np.mean([np.min(pH), pHVIII_ox])), E_OER_HER(E0_new['EOER_0'], slope , pH=np.mean([np.min(pH), pHVIII_ox]))])-0.05,
             'Zn$^{2+}$(aq)', fontsize=12, color='black')      # Zn^2+ domain
     ax.text(np.mean([pHXI_ox, np.max(pH)])-0.25,
@@ -396,7 +396,8 @@ elif pZn_value >= pZn_threshold_ox and pZn_value < pZn_threshold_pass: # Checkin
     
     # Adding text to different domains
     #ax.text(5, -1.25, 'Zn(s)', fontsize=12, color='black')                                 # Zn domain
-    ax.text(np.mean([np.min(pH), pHVIII_ox])-1.2,
+
+    ax.text(np.min([np.mean([np.min(pH), pH_neutral]), np.mean([np.min(pH), pHVIII_ox])])-1,
             np.mean([E_OER_HER(E0_new['EHER_0'], slope ,pH=np.mean([np.min(pH), pHVIII_ox])), E_OER_HER(E0_new['EOER_0'], slope , pH=np.mean([np.min(pH), pHVIII_ox]))])-0.05,
             'Zn$^{2+}$(aq)', fontsize=12, color='black')      # Zn^2+ domain
     ax.text(np.mean([pHX, np.max(pH)])-0.25,
