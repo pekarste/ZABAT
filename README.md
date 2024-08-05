@@ -5,7 +5,8 @@ ZABAT is a project about Zinc-air batteries, and this part of the project is abo
 2. Concentration profile for Zn in contact with additives (inorganic and organic)
 These models are purely based on thermodynamics, and does not say anything about the kinetics of the processes. 
 
-The projecct is written in [Python] and the last deliverable is an app made in [Streamlit] combining these two parts into one
+The projecct is written in [Python] and the last deliverable is an app made in [Streamlit] combining these two parts into one.
+This repo holds the modelling work associated with m-era.net ZABAT WP 3: Dielectric.
 
 ## Pourbaix diagram
 A Pourbaix diagram in general is a diagram based purely on thermodynamic properties and equilibria conditions. It describes what compound/species is most stable for different potentials and pH. The diagram is made up of intersecting lines representing different equilibria creating different domains. The lines can be either:
@@ -30,3 +31,12 @@ In order to run the program you need a working directory with Python, and the fo
 3. Scipy
 Which you can use pip to install or conda if you use anaconda.
 
+```bash
+pip install numpy, matplotlib, scipy
+```
+
+# Supports
+The main contributors to the *Thermodynamic model* are
+* Pål Emil England Karstensen [england1501@gmail.com](mailto:england1501@gmail.com) and [pal.karstensen@sintef.no](mailto:pal.karstensen@sintef.no). Mainly the Pourbaix diagram
+* Sidsel Meli Hanetho [SidselMeli.Hanetho@sintef.no](mailto:SidselMeli.Hanetho@sintef.no). Mainly the concentration profile
+Both have contributed to 
