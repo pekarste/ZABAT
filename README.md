@@ -5,7 +5,7 @@ ZABAT is a project about Zinc-air batteries, and this part of the project is abo
 2. Concentration profile for Zn in contact with additives (inorganic and organic)
 These models are purely based on thermodynamics, and does not say anything about the kinetics of the processes. 
 
-The projecct is written in [Python] and the last deliverable is an app made in [Streamlit] combining these two parts into one.
+The projecct is written in [Python](https://www.python.org/) and the last deliverable is an app made in [Streamlit](https://streamlit.io/) combining these two parts into one.
 This repo holds the modelling work associated with m-era.net ZABAT WP 3: Dielectric.
 
 ## Pourbaix diagram
@@ -29,7 +29,7 @@ In order to run the program you need a working directory with Python, and the fo
 1. Numpy
 2. Matplotlib
 3. Scipy
-Which you can use pip to install or conda if you use anaconda.
+Which you can use pip to install or conda if you use [anaconda](https://www.anaconda.com/).
 
 ```bash
 pip install numpy, matplotlib, scipy
