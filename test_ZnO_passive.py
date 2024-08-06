@@ -3,21 +3,20 @@ POURBAIX DIAGRAM OF Zn
 
 This script is generating a Pourbaix diagram of Zn for the ZABAT project.
 It is using thermodynamic data listed by Beverskog et al [Ref] and SI Chemical Data.
-Furthermore, it is also temperature dependent and meant to be generate a Pourbaix diagram 
+Furthermore, it is also temperature dependent and meant to generate a Pourbaix diagram 
 for the temperature range 25-100 degrees.
 
 Made by: Pål Emil England Karstensen and Sidsel Meli Hanetho
 '''
-
 
 import matplotlib.pyplot as plt
 import numpy as np
 from Functions.Functions import vant_Hoff, deltaG_weak, deltaG_T2, E0_2, add_polygon, E_OER_HER
 from Data.thermodynamic_data import *   # Imports all the thermodynamic data as well as the constants
 
-T = 85+273.15           # [K] - Temperature
+T = 25+273.15           # [K] - Temperature
 # Concentration of Zn ions
-pZn_value = 6     # Activity of dissolved Zn - pZn = -log(c_Zn) --- Maximum value is 6 and minimum value is 0
+pZn_value = 4     # Activity of dissolved Zn - pZn = -log(c_Zn) --- Maximum value is 6 and minimum value is 0
 ################################ THERMODYNAMIC DATA AT DIFFERENT TEMPERATURES ################################
 
 ## Gibbs free energy using no assumptions, except that the heat capacities are valid in this range
