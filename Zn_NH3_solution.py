@@ -43,7 +43,7 @@ class Zn_solution:
         self.c_Zn_2 = initial_concentrations[0]     # Setting the initial concentration of Zn^2+ for the system
         self.c_KOH = initial_concentrations[1]      # Setting the initial concentration of KOH for the system -- Not used
         self.c_K2CO3 = initial_concentrations[2]    # Setting the initial concentration of K2CO3 for the system
-        self.c_NH4OH = initial_concentrations[3]      # Setting the initial concentration of NH4OH
+        self.c_NH4OH = initial_concentrations[3]    # Setting the initial concentration of NH4OH
 
         self.c_Zn_tot = self.c_Zn_2                 # The total concentration of Zn species is always equal to the initial concentration of Zn^2+
         self.c_COx_tot = self.c_K2CO3               # The total concentration of COx species is always equal to the initial concentration of CO3^2-
@@ -429,10 +429,10 @@ class Zn_solution:
 
 
 # Initialize ChemicalEquilibrium
-c_Zn_2_0 = 10**(-1)
+c_Zn_2_0 = 10**(-3)
 c_KOH_0 = 6#6
 c_K2CO3_0 = 1.5#1.5
-c_NH4OH_0 = 1.5*10**(0)#0.5 --  Check this number, can't be 1.5
+c_NH4OH_0 = 1.5*10**(-6)#0.5 --  Check this number, can't be 1.5
 
 pZn = -np.log10(c_Zn_2_0)
 

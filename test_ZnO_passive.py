@@ -2,7 +2,7 @@
 POURBAIX DIAGRAM OF Zn
 
 This script is generating a Pourbaix diagram of Zn for the ZABAT project.
-It is using thermodynamic data listed by Beverskog et al [Ref] and SI Chemical Data.
+It is using thermodynamic data listed by Beverskog et al [1] and SI Chemical Data [2].
 Furthermore, it is also temperature dependent and meant to generate a Pourbaix diagram 
 for the temperature range 25-100 degrees.
 
@@ -14,9 +14,9 @@ import numpy as np
 from Functions.Functions import vant_Hoff, deltaG_weak, deltaG_T2, E0_2, add_polygon, E_OER_HER
 from Data.thermodynamic_data import *   # Imports all the thermodynamic data as well as the constants
 
-T = 25+273.15           # [K] - Temperature
+T = 85+273.15           # [K] - Temperature
 # Concentration of Zn ions
-pZn_value = 4     # Activity of dissolved Zn - pZn = -log(c_Zn) --- Maximum value is 6 and minimum value is 0
+pZn_value = 5     # Activity of dissolved Zn - pZn = -log(c_Zn) --- Maximum value is 6 and minimum value is 0
 ################################ THERMODYNAMIC DATA AT DIFFERENT TEMPERATURES ################################
 
 ## Gibbs free energy using no assumptions, except that the heat capacities are valid in this range
@@ -188,13 +188,12 @@ pZn_threshold_eps = (deltaG_new_T['deltaG_IX-eps']-deltaG_new_T['deltaG_X'])/(co
 pZn_threshold = (deltaG_new_T['deltaG_IX']-deltaG_new_T['deltaG_X'])/(constants['R']*T*np.log(10))
 # The pZn where the equilibrium ZnO <--> Zn(OH)3^-1 and Zn(OH)3^-1 <--> Zn(OH)4^2- becomes the same and the domain for Zn(OH)3^- vanishes
 pZn_threshold_ox = (deltaG_new_T['deltaG_IX-ox'] - deltaG_new_T['deltaG_X'])/(constants['R']*T*np.log(10))
-
 # Threshold for stability of ZnO(s)/Zn(OH)2(aq) (pZn higher than this and we have no passivation with ZnO)
 pZn_threshold_pass = (deltaG_new_T['deltaG_XII'])/(constants['R']*T*np.log(10))
 
-print(pZn_threshold)
-print(pZn_threshold_ox)
-print(pZn_threshold_pass)
+print(f'Threshold where ZnOH3^- dissapears (when ZnOH2 is dominating): {pZn_threshold}')
+print(f'Threshold where ZnOH3^- dissapears (when ZnO is dominating): {pZn_threshold_ox}')
+print(f'Threshold where ZnOH2 becomes the most dominant: {pZn_threshold_pass}')
 
 # Neutral pH
 Kw = np.exp(-deltaG_new_T['deltaG_W']/(constants['R']*T))
@@ -300,9 +299,9 @@ if pZn_value < pZn_threshold_ox:
     # Plotting the lines of the Pourbaix diagram
     ax.plot(pH[:index_I_III_ox], EI[:index_I_III_ox], 'k', label='Zn$^{2+}$ - Zn', linestyle=linestyle[0])          # Electrochemical - Equilibrium between Zn^2+ and Zn(s) 
     ax.vlines(pHVIII_ox, EI[index_I_III_ox], 1.5, 'k', label='Zn$^{2+}$ - ZnO', linestyle=linestyle[0])             # Chemical        - Equilibrium between Zn^2+ and ZnO
-    ax.plot(pH[index_I_III_ox: index_III_ox_V], EIII_ox[index_I_III_ox: index_III_ox_V], 'c', label='ZnO - Zn')     # Electrochemical - Equilibrium between ZnO and Zn
-    ax.plot(pH[index_III_ox_V:], EV[index_III_ox_V:], 'm', label='Zn(OH)$_{4}^{2-}$ - Zn', linestyle=linestyle[0])  # Electrochemical - Equilibrium between Zn(OH)4^2- and Zn(s)
-    ax.vlines(pHXI_ox, EV[index_III_ox_V], 1.5, 'm', label='ZnO - Zn(OH)$_{4}^{2-}$', linestyle=linestyle[0])       # Chemical        - Equilibrium between ZnO(s) and Zn(OH)4^2-
+    ax.plot(pH[index_I_III_ox: index_III_ox_V], EIII_ox[index_I_III_ox: index_III_ox_V], 'k', label='ZnO - Zn')     # Electrochemical - Equilibrium between ZnO and Zn
+    ax.plot(pH[index_III_ox_V:], EV[index_III_ox_V:], 'k', label='Zn(OH)$_{4}^{2-}$ - Zn', linestyle=linestyle[0])  # Electrochemical - Equilibrium between Zn(OH)4^2- and Zn(s)
+    ax.vlines(pHXI_ox, EV[index_III_ox_V], 1.5, 'k', label='ZnO - Zn(OH)$_{4}^{2-}$', linestyle=linestyle[0])       # Chemical        - Equilibrium between ZnO(s) and Zn(OH)4^2-
     
     # Colouring the Zn(s) domain
     text_coord_Zn = [np.mean([np.min(pH), pH_neutral]),
@@ -325,7 +324,7 @@ if pZn_value < pZn_threshold_ox:
     
     # Adding pZn text 
     ax.text(pH[index_I_III_ox+15], 0.9, pZn_string, color='k', rotation = 90)   # Adding pZn value to equilibrium between Zn^2+ and Zn(OH)2 -- must be fixed
-    ax.text(pH[index_III_ox_V+15], 0.9, pZn_string, color='m', rotation = 90)   # Adding pZn value to equilibrium between Zn(OH)2 and Zn(OH)4^2 -- must be fixed
+    ax.text(pH[index_III_ox_V+15], 0.9, pZn_string, color='k', rotation = 90)   # Adding pZn value to equilibrium between Zn(OH)2 and Zn(OH)4^2 -- must be fixed
 
     # Adding labels to different domains
     # Zn^2+ domain 
@@ -342,11 +341,11 @@ elif pZn_value >= pZn_threshold_ox and pZn_value < pZn_threshold_pass: # Checkin
     # Plotting the lines of the Pourbaix diagram
     ax.plot(pH[:index_I_III_ox], EI[:index_I_III_ox], 'k', label='Zn$^{2+}$ - Zn', linestyle=linestyle[0])                      # Electrochemical - Equilibrium between Zn^2+ and Zn(s) 
     ax.vlines(pHVIII_ox, EI[index_I_III_ox], 1.5, 'k', label='Zn$^{2+}$ - ZnO', linestyle=linestyle[0])                         # Chemical        - Equilibrium between Zn^2+ and ZnO(s)
-    ax.vlines(pHX, EV[index_IV_V], 1.5, 'm', label='Zn(OH)$_{3}^-$ - Zn(OH)$_{4}^{2-}$', linestyle=linestyle[0])                # Chemical        - Equilibrium between Zn(OH)3^- and Zn(OH)4^2-
-    ax.vlines(pHIX_ox, EIV[index_III_ox_IV], 1.5, 'r', label='ZnO - Zn(OH)$_{3}^-$', linestyle=linestyle[0])                    # Chemical        - Equilibrium between Zn(OH)2 and Zn(OH)3^-
-    ax.plot(pH[index_III_ox_IV:index_IV_V], EIV[index_III_ox_IV:index_IV_V], 'r', label='Zn(OH)$_{3}^{-}$ - Zn', linestyle=linestyle[0]) # Electrochemical - Equilibrium between Zn(OH)3^- and Zn
-    ax.plot(pH[index_IV_V:], EV[index_IV_V:], 'm', label='Zn(OH)$_{4}^{2-}$ - Zn', linestyle=linestyle[0])                      # Electrochemical - Equilibrium between Zn(OH)4^2- and Zn   
-    ax.plot(pH[index_I_III_ox: index_III_ox_IV], EIII_ox[index_I_III_ox: index_III_ox_IV], 'c', label='ZnO - Zn')               # Electrochemical - Equilibrium between Zn(OH)2 and Zn
+    ax.vlines(pHX, EV[index_IV_V], 1.5, 'k', label='Zn(OH)$_{3}^-$ - Zn(OH)$_{4}^{2-}$', linestyle=linestyle[0])                # Chemical        - Equilibrium between Zn(OH)3^- and Zn(OH)4^2-
+    ax.vlines(pHIX_ox, EIV[index_III_ox_IV], 1.5, 'k', label='ZnO - Zn(OH)$_{3}^-$', linestyle=linestyle[0])                    # Chemical        - Equilibrium between Zn(OH)2 and Zn(OH)3^-
+    ax.plot(pH[index_III_ox_IV:index_IV_V], EIV[index_III_ox_IV:index_IV_V], 'k', label='Zn(OH)$_{3}^{-}$ - Zn', linestyle=linestyle[0]) # Electrochemical - Equilibrium between Zn(OH)3^- and Zn
+    ax.plot(pH[index_IV_V:], EV[index_IV_V:], 'k', label='Zn(OH)$_{4}^{2-}$ - Zn', linestyle=linestyle[0])                      # Electrochemical - Equilibrium between Zn(OH)4^2- and Zn   
+    ax.plot(pH[index_I_III_ox: index_III_ox_IV], EIII_ox[index_I_III_ox: index_III_ox_IV], 'k', label='ZnO - Zn')               # Electrochemical - Equilibrium between Zn(OH)2 and Zn
 
     
     # Colouring the Zn(s) domain
@@ -369,12 +368,12 @@ elif pZn_value >= pZn_threshold_ox and pZn_value < pZn_threshold_pass: # Checkin
 
     # Adding pZn text 
     ax.text(pH[index_I_III_ox+15], 0.9, pZn_string, color='k', rotation = 90)   # Adding pZn value to equilibrium between Zn^2+ and Zn(OH)2 -- must be fixed
-    ax.text(pH[index_IV_V+15], 0.9, pZn_string, color='m', rotation = 90)       # Adding pZn value to equilibrium between Zn(OH)3^-1 and Zn(OH)4^2
+    ax.text(pH[index_IV_V+15], 0.9, pZn_string, color='k', rotation = 90)       # Adding pZn value to equilibrium between Zn(OH)3^-1 and Zn(OH)4^2
     # Checking if there is room for the letters and sets the label accordingly 
     if pHX - pHIX_ox < 0.5:
-        ax.text(pH[index_III_ox_IV-50], 0.9, pZn_string, color='r', rotation = 90)     # Adding pZn value to equilibrium between Zn(OH)2 and Zn(OH)3^-
+        ax.text(pH[index_III_ox_IV-50], 0.9, pZn_string, color='k', rotation = 90)     # Adding pZn value to equilibrium between Zn(OH)2 and Zn(OH)3^-
     elif pHX - pHIX_ox >= 0.5:
-        ax.text(pH[index_III_ox_IV+15], 0.9, pZn_string, color='r', rotation = 90)     # Adding pZn value to equilibrium between Zn(OH)2 and Zn(OH)3^-
+        ax.text(pH[index_III_ox_IV+15], 0.9, pZn_string, color='k', rotation = 90)     # Adding pZn value to equilibrium between Zn(OH)2 and Zn(OH)3^-
     
     # Adding text to different domains
 
@@ -407,11 +406,11 @@ elif pZn_value >= pZn_threshold_pass:
     # Plotting the lines of the Pourbaix diagram
     ax.plot(pH[:index_I_III], EI[:index_I_III], 'k', label='Zn$^{2+}$ - Zn', linestyle=linestyle[0])                                # Electrochemical - Equilibrium between Zn^2+ and Zn(s) 
     ax.vlines(pHVIII, EI[index_I_III], 1.5, 'k', label='Zn$^{2+}$ - Zn(OH)2(aq)', linestyle=linestyle[0])                           # Chemical        - Equilibrium between Zn^2+ and ZnO(s)
-    ax.vlines(pHX, EV[index_IV_V], 1.5, 'm', label='Zn(OH)$_{3}^-$ - Zn(OH)$_{4}^{2-}$', linestyle=linestyle[0])                    # Chemical        - Equilibrium between Zn(OH)3^- and Zn(OH)4^2-
-    ax.vlines(pHIX, EIV[index_III_IV], 1.5, 'r', label='Zn(OH)2(aq) - Zn(OH)$_{3}^-$', linestyle=linestyle[0])                      # Chemical        - Equilibrium between Zn(OH)2 and Zn(OH)3^-
-    ax.plot(pH[index_III_IV:index_IV_V], EIV[index_III_IV:index_IV_V], 'r', label='Zn(OH)$_{3}^{-}$ - Zn', linestyle=linestyle[0])  # Electrochemical - Equilibrium between Zn(OH)3^- and Zn
-    ax.plot(pH[index_IV_V:], EV[index_IV_V:], 'm', label='Zn(OH)$_{4}^{2-}$ - Zn', linestyle=linestyle[0])                          # Electrochemical - Equilibrium between Zn(OH)4^2- and Zn   
-    ax.plot(pH[index_I_III: index_III_IV], EIII[index_I_III: index_III_IV], 'c', label='Zn(OH)2(aq) - Zn')                          # Electrochemical - Equilibrium between Zn(OH)2 and Zn
+    ax.vlines(pHX, EV[index_IV_V], 1.5, 'k', label='Zn(OH)$_{3}^-$ - Zn(OH)$_{4}^{2-}$', linestyle=linestyle[0])                    # Chemical        - Equilibrium between Zn(OH)3^- and Zn(OH)4^2-
+    ax.vlines(pHIX, EIV[index_III_IV], 1.5, 'k', label='Zn(OH)2(aq) - Zn(OH)$_{3}^-$', linestyle=linestyle[0])                      # Chemical        - Equilibrium between Zn(OH)2 and Zn(OH)3^-
+    ax.plot(pH[index_III_IV:index_IV_V], EIV[index_III_IV:index_IV_V], 'k', label='Zn(OH)$_{3}^{-}$ - Zn', linestyle=linestyle[0])  # Electrochemical - Equilibrium between Zn(OH)3^- and Zn
+    ax.plot(pH[index_IV_V:], EV[index_IV_V:], 'k', label='Zn(OH)$_{4}^{2-}$ - Zn', linestyle=linestyle[0])                          # Electrochemical - Equilibrium between Zn(OH)4^2- and Zn   
+    ax.plot(pH[index_I_III: index_III_IV], EIII[index_I_III: index_III_IV], 'k', label='Zn(OH)2(aq) - Zn')                          # Electrochemical - Equilibrium between Zn(OH)2 and Zn
 
     # Colouring the Zn(s) domain
     text_coord_Zn = [np.mean([np.min(pH), pH_neutral]),
@@ -434,8 +433,8 @@ elif pZn_value >= pZn_threshold_pass:
 
     # Adding pZn text
     ax.text(pH[index_I_III+15], 0.9, pZn_string, color='k', rotation = 90)   # Adding pZn value to equilibrium between Zn^2+ and Zn(OH)2 -- must be fixed
-    ax.text(pH[index_III_IV+15], 0.9, pZn_string, color='r', rotation = 90)  # Adding pZn value to equilibrium between Zn(OH)2 and Zn(OH)3^-
-    ax.text(pH[index_IV_V+15], 0.9, pZn_string, color='m', rotation = 90)    # Adding pZn value to equilibrium between Zn(OH)3^-1 and Zn(OH)4^2
+    ax.text(pH[index_III_IV+15], 0.9, pZn_string, color='k', rotation = 90)  # Adding pZn value to equilibrium between Zn(OH)2 and Zn(OH)3^-
+    ax.text(pH[index_IV_V+15], 0.9, pZn_string, color='k', rotation = 90)    # Adding pZn value to equilibrium between Zn(OH)3^-1 and Zn(OH)4^2
     
     # Adding text to different domains
     
@@ -453,8 +452,8 @@ elif pZn_value >= pZn_threshold_pass:
             'Zn(OH)$^{-}_{3}$(aq)', fontsize=12, color='black', rotation=90)  # Zn(OH)3^- domain
 
 # Adding things that are present in the diagram for all cases
-ax.plot(pH,EHER, '--')     # Line for the HER
-ax.plot(pH,EOER, '--')     # Line for the OER
+ax.plot(pH,EHER, '--', c='k')     # Line for the HER
+ax.plot(pH,EOER, '--', c='k')     # Line for the OER
 ax.text(2, -0.35, 'HER', fontsize=12, color='black', rotation=-15)  # HER line
 ax.text(2, 0.85, 'OER', fontsize=12, color='black', rotation=-15)   # OER line
 ax.text(1, 1.30, 'T = ' + str(T-273.15) + '$^{o}C$',fontsize=12, color='black', bbox=dict(facecolor='white', alpha=1))
@@ -464,3 +463,10 @@ ax.set_ylabel('Potential - E  /  V')
 ax.set_xlim(xmin=0, xmax=max(pH))   # Set the x-axis range
 ax.set_ylim(ymin=-1.5, ymax=1.5)    # Set the y-axis range
 plt.show()
+
+## References 
+#
+# [1] B. Beverskog and I. Puigdomenech, “Revised pourbaix diagrams for zinc at 25–300 °c,” Corrosion Science, vol. 39, no. 1, pp. 107–114, 1997.
+# [2] A. Blackman, “Aylward and findlay’s si chemical data,” 2014.
+#
+#
