@@ -213,7 +213,7 @@ def PourbaixDiagram(pZn, temperature):
 
     st.write('**Suppressed domain**')
     st.write(r'At this tempertaure, the formation of $Zn(OH)_{3}^{-}$(aq) is supressed until $pZn < %.2f$ . ' %pZn_threshold_ox)
-    st.write(r'After that, the domain for $Zn(OH)_{3}^{-}$(aq) will keep expanding until it reaches an equilibrium with $Zn(OH)_{2}$(aq) at $pZn \geqslant %.2f$' %pZn_threshold_pass)
+    st.write(r'After that, the domain for $Zn(OH)_{3}^{-}$(aq) will keep expanding until it reaches an equilibrium with $Zn(OH)_{2}$(aq) at $pZn \approx %.2f$' %pZn_threshold_pass)
     
     st.write('**Neutral pH of water**')
     st.write(r'At this temperature, the neutral $pH$ of water is $pH_{Neutral} = %.2f$' %pH_neutral)
@@ -517,19 +517,49 @@ def main():
     subheader2 = 'Concentration and temperature'
 
     # Writing a description for the subheader
-    multi2 = '''In addition to the $pH$ and potential defining the equilibria, the amount of dissolved species also shifts the equilibria in the diagram.
-            This is taken into account by the quantity $pZn$. In this diagram we approximate the activity to be equal to the concentration 
+    multi2 = ''' **Concentration**  
+            In addition to the $pH$ and potential defining the equilibria, the amount of dissolved species also shifts equilibria with dissolved Zn-species.
+            This is taken into account by the quantity $pZn$. \\
+            An example of such an equilibrium is the equilibrium between Zn(s) and Zn^{2+}(aq)
+            \\
+            $$ Zn^{2+}(aq) + 2e^{-} = Zn(s) $$
+            \\
+            Using the Nernst-equation to express the equilibrium reduction potential for the reactiong gives
+            \\
+            $$ E^{Rev}(T) = E^{0}(T) - \\frac{RT \\ln{10}}{nF}pZn^{2+} $$
+            \\
+            In this domiain, most of the dissolved species in the solution will come from Zn^{2+} ions, $pZn \\approx pZn^{2+}$.
+            \\
+            In this diagram we approximate the activity to be equal to the concentration 
             (divided by a reference concentration 1M). The $pZn$ can be visualised like this  
             \\
             $$ pZn = -log(a_{Zn}) \\approx -log\\left(\\frac{c_{Zn}}{c^{0}} \\right) $$  
             \\
-            This will for instance imply that if we have a concentration of total Zn-species dissolved to be $c_{Zn} = 10^{-6}$M, then $pZn = 6$
+            This will for instance imply that if we have a concentration of total Zn-species dissolved to be $c_{Zn} = 10^{-6}$M, then $pZn = 6$.
             A value of 6 is usually regarded as the corrosion limit, and a value of 8 is often used as a measure for ultra pure water [1]
             \\
+            \\
+            **Temperature**  
             In order to produce this Pourbaix Diagram, thermodynamic data from Beverskog *et al.* [1] was used along with supplementary data
             from SI Chemical Data [2]. By assuming that the heat capacities provided by Beverskog *et al.* [1] are valid within the temperature
-            range between 25-100 °C, the temperature could also be changed. The neutral $pH$ of water is for instance a function of temperature.
-            The neutral pH of water is represented by the horisontal dotted grey line.
+            range between 25-100 °C, the temperature dependence could also be implemented. The temperature dependence were implemented by assuming...  
+            \\
+            $$ \Delta_{r}G^{0}(T_{2}) = \Delta_{r}H^{0}(T_{2}) - T_{2}\Delta_{r}S^{0}(T_{2}) $$   
+            \\
+            Where $\Delta_{r}H^{0}(T_{2})$ and $\Delta_{r}S^{0}(T_{2})$ are found by  
+            \\
+            $$ \Delta_{r}H^{0}(T_{2}) = \Delta_{r}H^{0}(T_{1}) + \int_{T_{1}}^{T_{2}} \Delta_{r}C_{p} \,dT  \quad\land\quad \Delta_{r}S^{0}(T_{2}) = \Delta_{r}S^{0}(T_{1}) + \int_{T_{1}}^{T_{2}} \\frac{\Delta_{r}C_{p}}{T} \,dT$$
+            \\
+            \\
+            Here, $\Delta_{r}G$, $\Delta_{r}H$, and $\Delta_{r}S$ represents Gibbs free energy, enthalpy, and entropy, for the reaction.
+            $T_{2}$ is symbolising another temperature than the reference temperature $T_{1} = 25°C$. $\Delta_{r}C_{p}$ is the
+            heat capacity for the reaction. One can connect the standard reduction reaction for an electrochemical reaction to the Gibbs free energy 
+            for the reaction at a specific temperature by  
+            \\
+            $$ E^{0}(T) = -\\frac{\Delta_{r}G^{0}(T)}{nF} $$
+            \\
+            \\
+            The neutral $pH$ of water is also a function of temperature and is represented by the vertical dotted grey line.
             '''
     # Using streamlit to print the text
     st.write(Introduction)
@@ -581,3 +611,12 @@ if __name__ == "__main__":
 # [2] A. Blackman, “Aylward and findlay’s si chemical data,” 2014.
 #
 #
+########################################################
+'''
+Running the streamlit app:
+- Open Command line (seach for cmd in the start meny)
+- Navigate to the directory with the venv (enter: cd OneDrive - SINTEF\Documents\Prosjekter\ZABAT)
+- Activate the environment (it has streamlit) (enter venv-zabat\Scripts\activate)
+- Navigate to the directory with the script (enter: cd GitHub\ZABAT)
+- Run the script with streamlit (enter: streamlit run PourbaixDiagram_Zn_Streamlit or python -m streamlit run PourbaixDiagram_Zn_Streamlit)
+'''
