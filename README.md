@@ -5,7 +5,7 @@ ZABAT is a project about Zinc-air batteries, and this part of the project is abo
 2. Concentration profile for Zn in contact with additives (inorganic and organic)
 These models are purely based on thermodynamics, and does not say anything about the kinetics of the processes. 
 
-The projecct is written in [Python](https://www.python.org/) and the last deliverable is an app made in [Streamlit](https://streamlit.io/) combining these two parts into one.
+The project is written in [Python](https://www.python.org/) and the last deliverable is an app made in [Streamlit](https://streamlit.io/) combining these two parts into one.
 This repo holds the modelling work associated with m-era.net ZABAT WP 3: Dielectric.
 
 ## Pourbaix diagram
@@ -20,6 +20,30 @@ Usually the temperature and pressure is set/fixed so that the pH and the potenti
 The thermodynamic data used in this project is gathered from BEVERSKOG et al. [source] and SI Chemical Data [source], and assumed to be able to describe the equilibria in the temperature range 25-100 degrees celsius. 
 [Add picture here]
 
+### Running the app with Streamlit ###
+In order to run the script with the Streamlit application, called "PourbaixDiagram_Zn_Streamlit", you should do the following:
+*If you are using a virtual environment*
+1. Navigate to the directory where you have the working environment with the necessary packages (see below for necessary packages) using command line (or Anadonca/conda prompt if you are using anaconda/conda) and entering:
+   ```bash
+   cd path\to\directory
+   ```
+2. Activate the virtual environment by entering:
+   ```bash
+   name-of-venv\Scripts\activate
+   ```
+   Now, the virtual environment should be activated which makes it possible to run the streamlit app.
+3. Navigate to the working directory with the scipt by entering:
+   ```bash
+    cd path\to\working\directory
+    ```
+4. Run the script either by
+   ```bash
+   streamlit run name_of_script.py
+   ```
+   or by running it as a python module by
+   ```bash
+   python -m streamlit run name_of_script.py 
+
 ## Concentration profile
 The concentration profile is just a concentration vs pH diagram showing the amount of dissolved species in the solution based on a start concentration which is assumed. It shows how the concentration of species varies for different pH. These concentrations are governed by a set of chemical equilibria described by the law of mass action, giving rise to a set of equations which must be solved simultaneously. It is purely based on thermodynamics. The equilibrium constant for the different reactions is gathered from  ... [source]. Similar projects have been done by ...
 The concentration profile of different Zn-species is studied both with inorganic additives $KOH$ (which effectively just decides the pH and gives more $OH^{-}$) and $NH_{3}$, but also organic additives like...
@@ -29,14 +53,15 @@ In order to run the program you need a working directory with Python, and the fo
 1. Numpy
 2. Matplotlib
 3. Scipy
+4. Streamlit
 Which you can use pip to install or conda if you use [anaconda](https://www.anaconda.com/).
 
 ```bash
-pip install numpy, matplotlib, scipy
+pip install numpy, matplotlib, scipy, streamlit
 ```
 
 # Supports
-The main contributors to the *Thermodynamic model* are
+The main contributors to the *Thermodynamic model* and *Pourbaix Diagram* is
 * Pål Emil England Karstensen [england1501@gmail.com](mailto:england1501@gmail.com) and [pal.karstensen@sintef.no](mailto:pal.karstensen@sintef.no). Mainly the Pourbaix diagram
 * Sidsel Meli Hanetho [SidselMeli.Hanetho@sintef.no](mailto:SidselMeli.Hanetho@sintef.no). Mainly the concentration profile
 Both have contributed to 
