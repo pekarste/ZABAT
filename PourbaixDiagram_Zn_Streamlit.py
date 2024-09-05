@@ -205,19 +205,6 @@ def PourbaixDiagram(pZn, temperature):
     pKw = -np.log10(Kw)
     pH_neutral = (1/2)*pKw
 
-    st.write(f'At T = {temperature - 273.15} °C we have that:')
-    
-    st.write('**Passivating effects**')  
-    st.write(r'At this temperature, $ZnO$ will be passivating as long as $pZn \leqslant %.2f$' %pZn_threshold_pass)
-    st.write(r'After that, the dominating species will be $Zn(OH)_{2}$(aq), and we will not have any passivating effects')
-
-    st.write('**Suppressed domain**')
-    st.write(r'At this tempertaure, the formation of $Zn(OH)_{3}^{-}$(aq) is supressed until $pZn < %.2f$ . ' %pZn_threshold_ox)
-    st.write(r'After that, the domain for $Zn(OH)_{3}^{-}$(aq) will keep expanding until it reaches an equilibrium with $Zn(OH)_{2}$(aq) at $pZn \approx %.2f$' %pZn_threshold_pass)
-    
-    st.write('**Neutral pH of water**')
-    st.write(r'At this temperature, the neutral $pH$ of water is $pH_{Neutral} = %.2f$' %pH_neutral)
-
     ############################################## PLOTTING ##############################################
 
     pH = np.arange(0, 16, 0.01)     # pH range
@@ -479,19 +466,32 @@ def PourbaixDiagram(pZn, temperature):
     ax.set_ylim(ymin=-1.5, ymax=1.5)    # Set the y-axis range
     st.pyplot(fig=fig)
 
+    st.write(f'At T = {temperature - 273.15} °C we have that:')
+    
+    st.write('**Passivating effects**')  
+    st.write(r'At this temperature, ZnO will be passivating as long as pZn $\leqslant %.2f$' %pZn_threshold_pass)
+    st.write(r'After that, the dominating species will be Zn(OH)$_{2}$(aq), and we will not have any passivating effects')
+
+    st.write('**Suppressed domain**')
+    st.write(r'At this tempertaure, the formation of Zn(OH)$_{3}^{-}$(aq) is supressed until pZn $< %.2f$ . ' %pZn_threshold_ox)
+    st.write(r'After that, the domain for Zn(OH)$_{3}^{-}$(aq) will keep expanding until it reaches an equilibrium with Zn(OH)$_{2}$(aq) at pZn $\approx %.2f$' %pZn_threshold_pass)
+    
+    st.write('**Neutral pH of water**')
+    st.write(r'At this temperature, the neutral $pH$ of water is pH$_{Neutral} = %.2f$' %pH_neutral)
+
 
 def main():
     # Setting the title for the app
     st.title('Pourbaix Diagram of Zn')
 
     # Writing an introduction
-    Introduction='''Pourbaix Diagrams are a way of displaying the most stable compound/species as a function of $pH$ and 
-            potential, $E$, at a specific temperature and pressure. It is purely based on thermodynamics and equilibria,
+    Introduction='''Pourbaix Diagrams are a way of displaying the most stable compound/species as a function of **pH** and 
+            potential, **E**, at a specific temperature and pressure. It is purely based on thermodynamics and equilibria,
             so it does not tell anything about the rate of which processes occur. Still, it is a popular tool within the
             field of corrosion. Pourbaix Diagrams are usually illustrating a compound (like Zn in this case) in contact
             with water. Since it is in contact with water, the lines for the Hydrogen Evolution Reaction (HER) and 
             Oxygen Evolution Reaction (OER) are also normally included. The shaded areas in the diagram shows the domains
-            where we have **immune** ($Zn(s)$) and **passivating** ($ZnO(s)$) regions, meaning no corrosion.
+            where we have **immune** Zn(s) and **passivating** ZnO(s) regions, meaning no corrosion.
             '''
     # Creating a subheader
     subheader1 = 'Equilibria'
@@ -502,13 +502,13 @@ def main():
             \\
             $$ Zn^{2+}(aq) + H_{2}O = ZnO(s) + 2H^{+}(aq) $$  
             \\
-            **Horisontal lines** represents an electrochemical equilibrium which is independent of the $pH$, and only a function of the potential.  
+            **Horisontal lines** represents an electrochemical equilibrium which is independent of the **pH**, and only a function of the potential.  
             An example of this would be the equilibrium between Zn(s) and Zn$^{2+}$  
             \\
             $$ Zn^{2+} + 2e^{-} = Zn(s) $$  
             \\
-            **Sloped lines** represents an electrochemical equilibrium which is also dependent of the $pH$.  
-            An example of thsi would be the equilibrium between the Zn(s) and ZnO(s)  
+            **Sloped lines** represents an electrochemical equilibrium which is also dependent of the **pH**.  
+            An example of this would be the equilibrium between the Zn(s) and ZnO(s)  
             \\
             $$ ZnO(s) + 2e^{-} + 2H^{+}(aq) = Zn(s) + H_{2}O(l) $$  
             '''
@@ -518,9 +518,9 @@ def main():
 
     # Writing a description for the subheader
     multi2 = ''' **Concentration**  
-            In addition to the $pH$ and potential defining the equilibria, the amount of dissolved species also shifts equilibria with dissolved Zn-species.
-            This is taken into account by the quantity $pZn$. \\
-            An example of such an equilibrium is the equilibrium between Zn(s) and Zn^{2+}(aq)
+            In addition to the **pH** and **potential** defining the equilibria, the amount of dissolved species also shifts equilibria with dissolved Zn-species.
+            This is taken into account by the quantity **pZn**. \\
+            An example of such an equilibrium is the equilibrium between Zn(s) and Zn$^{2+}$(aq)
             \\
             $$ Zn^{2+}(aq) + 2e^{-} = Zn(s) $$
             \\
@@ -528,14 +528,14 @@ def main():
             \\
             $$ E^{Rev}(T) = E^{0}(T) - \\frac{RT \\ln{10}}{nF}pZn^{2+} $$
             \\
-            In this domiain, most of the dissolved species in the solution will come from Zn^{2+} ions, $pZn \\approx pZn^{2+}$.
+            In this domiain, most of the dissolved species in the solution will come from Zn$^{2+}$ ions, pZn $\\approx$ pZn$^{2+}$.
             \\
             In this diagram we approximate the activity to be equal to the concentration 
-            (divided by a reference concentration 1M). The $pZn$ can be visualised like this  
+            (divided by a reference concentration 1M). The **pZn** can be visualised like this  
             \\
             $$ pZn = -log(a_{Zn}) \\approx -log\\left(\\frac{c_{Zn}}{c^{0}} \\right) $$  
             \\
-            This will for instance imply that if we have a concentration of total Zn-species dissolved to be $c_{Zn} = 10^{-6}$M, then $pZn = 6$.
+            This will for instance imply that if we have a total concentration of Zn-species dissolved to be c$_{Zn}$ = 10$^{-6}$M, then **pZn** = 6.
             A value of 6 is usually regarded as the corrosion limit, and a value of 8 is often used as a measure for ultra pure water [1]
             \\
             \\
@@ -552,14 +552,14 @@ def main():
             \\
             \\
             Here, $\Delta_{r}G$, $\Delta_{r}H$, and $\Delta_{r}S$ represents Gibbs free energy, enthalpy, and entropy, for the reaction.
-            $T_{2}$ is symbolising another temperature than the reference temperature $T_{1} = 25°C$. $\Delta_{r}C_{p}$ is the
+            T$_{2}$ is symbolising another temperature than the reference temperature T_{1}$ = 25°C. $\Delta_{r}C_{p}$ is the
             heat capacity for the reaction. One can connect the standard reduction reaction for an electrochemical reaction to the Gibbs free energy 
             for the reaction at a specific temperature by  
             \\
             $$ E^{0}(T) = -\\frac{\Delta_{r}G^{0}(T)}{nF} $$
             \\
             \\
-            The neutral $pH$ of water is also a function of temperature and is represented by the vertical dotted grey line.
+            The neutral **pH** of water is also a function of temperature and is represented by the vertical dotted grey line.
             '''
     # Using streamlit to print the text
     st.write(Introduction)
@@ -612,11 +612,11 @@ if __name__ == "__main__":
 #
 #
 ########################################################
-'''
-Running the streamlit app:
-- Open Command line (seach for cmd in the start meny)
-- Navigate to the directory with the venv (enter: cd OneDrive - SINTEF\Documents\Prosjekter\ZABAT)
-- Activate the environment (it has streamlit) (enter venv-zabat\Scripts\activate)
-- Navigate to the directory with the script (enter: cd GitHub\ZABAT)
-- Run the script with streamlit (enter: streamlit run PourbaixDiagram_Zn_Streamlit or python -m streamlit run PourbaixDiagram_Zn_Streamlit)
-'''
+
+### 
+#Running the streamlit app:
+# - Open Command line (seach for cmd in the start meny)
+# - Navigate to the directory with the venv (enter: cd OneDrive - SINTEF\Documents\Prosjekter\ZABAT)
+# - Activate the environment (it has streamlit) (enter venv-zabat\Scripts\activate)
+# - Navigate to the directory with the script (enter: cd GitHub\ZABAT)
+# - Run the script with streamlit (enter: streamlit run PourbaixDiagram_Zn_Streamlit or python -m streamlit run PourbaixDiagram_Zn_Streamlit)
