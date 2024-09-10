@@ -327,8 +327,8 @@ def PourbaixDiagram(pZn, temperature):
                     colour='black', alpha=0.25, label='ZnO(s)', text_coord=text_coord_ZnO, text='ZnO(s)', text_rotation=0)
         
         # Adding pZn text 
-        ax.text(pH[index_I_III_ox+15], 0.9, pZn_string, color='k', rotation = 90)   # Adding pZn value to equilibrium between Zn^2+ and Zn(OH)2 -- must be fixed
-        ax.text(pH[index_III_ox_V+15], 0.9, pZn_string, color='k', rotation = 90)   # Adding pZn value to equilibrium between Zn(OH)2 and Zn(OH)4^2 -- must be fixed
+        #ax.text(pH[index_I_III_ox+15], 0.9, pZn_string, color='k', rotation = 90)   # Adding pZn value to equilibrium between Zn^2+ and Zn(OH)2 -- must be fixed
+        #ax.text(pH[index_III_ox_V+15], 0.9, pZn_string, color='k', rotation = 90)   # Adding pZn value to equilibrium between Zn(OH)2 and Zn(OH)4^2 -- must be fixed
 
         # Adding labels to different domains
         # Zn^2+ domain 
@@ -370,8 +370,8 @@ def PourbaixDiagram(pZn, temperature):
                     colour='black', alpha=0.25, label='ZnO(s)', text_coord=text_coord_ZnO, text='ZnO(s)', text_rotation=0)
 
         # Adding pZn text 
-        ax.text(pH[index_I_III_ox+15], 0.9, pZn_string, color='k', rotation = 90)   # Adding pZn value to equilibrium between Zn^2+ and Zn(OH)2 -- must be fixed
-        ax.text(pH[index_IV_V+15], 0.9, pZn_string, color='k', rotation = 90)       # Adding pZn value to equilibrium between Zn(OH)3^-1 and Zn(OH)4^2
+        #ax.text(pH[index_I_III_ox+15], 0.9, pZn_string, color='k', rotation = 90)   # Adding pZn value to equilibrium between Zn^2+ and Zn(OH)2 -- must be fixed
+        #ax.text(pH[index_IV_V+15], 0.9, pZn_string, color='k', rotation = 90)       # Adding pZn value to equilibrium between Zn(OH)3^-1 and Zn(OH)4^2
         # Checking if there is room for the letters and sets the label accordingly 
         if pHX - pHIX_ox < 0.5:
             ax.text(pH[index_III_ox_IV-50], 0.9, pZn_string, color='k', rotation = 90)     # Adding pZn value to equilibrium between Zn(OH)2 and Zn(OH)3^-
@@ -434,9 +434,9 @@ def PourbaixDiagram(pZn, temperature):
                     colour='black', alpha=0, label='Zn(OH)$_{2}$(aq)', text_coord=text_coord_ZnOH2, text='Zn(OH)$_{2}$(aq)', text_rotation=90)
 
         # Adding pZn text
-        ax.text(pH[index_I_III+15], 0.9, pZn_string, color='k', rotation = 90)   # Adding pZn value to equilibrium between Zn^2+ and Zn(OH)2 -- must be fixed
-        ax.text(pH[index_III_IV+15], 0.9, pZn_string, color='k', rotation = 90)  # Adding pZn value to equilibrium between Zn(OH)2 and Zn(OH)3^-
-        ax.text(pH[index_IV_V+15], 0.9, pZn_string, color='k', rotation = 90)    # Adding pZn value to equilibrium between Zn(OH)3^-1 and Zn(OH)4^2
+        #ax.text(pH[index_I_III+15], 0.9, pZn_string, color='k', rotation = 90)   # Adding pZn value to equilibrium between Zn^2+ and Zn(OH)2 -- must be fixed
+        #ax.text(pH[index_III_IV+15], 0.9, pZn_string, color='k', rotation = 90)  # Adding pZn value to equilibrium between Zn(OH)2 and Zn(OH)3^-
+        #ax.text(pH[index_IV_V+15], 0.9, pZn_string, color='k', rotation = 90)    # Adding pZn value to equilibrium between Zn(OH)3^-1 and Zn(OH)4^2
         
         # Adding text to different domains
         
@@ -563,10 +563,7 @@ def main():
             '''
     # Using streamlit to print the text
     st.write(Introduction)
-    st.subheader(subheader1)
-    st.markdown(multi1)
-    st.subheader(subheader2)
-    st.markdown(multi2)
+    ## Inserting the sliders and temperature input
 
     # text input for the pZn with two decimal resolution/step size
     st.subheader('Input values')
@@ -587,10 +584,13 @@ def main():
     
         return
     
-    # Plotting the diagram
-
+    ## Plotting the Pourbvaix Diagram
     PourbaixDiagram(pZn=pZn, temperature=temperature)
 
+    st.subheader(subheader1)
+    st.markdown(multi1)
+    st.subheader(subheader2)
+    st.markdown(multi2)
 
 if __name__ == "__main__":
     main()
@@ -619,4 +619,4 @@ if __name__ == "__main__":
 # - Navigate to the directory with the venv (enter: cd OneDrive - SINTEF\Documents\Prosjekter\ZABAT)
 # - Activate the environment (it has streamlit) (enter venv-zabat\Scripts\activate)
 # - Navigate to the directory with the script (enter: cd GitHub\ZABAT)
-# - Run the script with streamlit (enter: streamlit run PourbaixDiagram_Zn_Streamlit or python -m streamlit run PourbaixDiagram_Zn_Streamlit)
+# - Run the script with streamlit (enter: streamlit run PourbaixDiagram_Zn_Streamlit.py or python -m streamlit run PourbaixDiagram_Zn_Streamlit)
