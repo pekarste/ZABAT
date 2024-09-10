@@ -373,10 +373,10 @@ def PourbaixDiagram(pZn, temperature):
         #ax.text(pH[index_I_III_ox+15], 0.9, pZn_string, color='k', rotation = 90)   # Adding pZn value to equilibrium between Zn^2+ and Zn(OH)2 -- must be fixed
         #ax.text(pH[index_IV_V+15], 0.9, pZn_string, color='k', rotation = 90)       # Adding pZn value to equilibrium between Zn(OH)3^-1 and Zn(OH)4^2
         # Checking if there is room for the letters and sets the label accordingly 
-        if pHX - pHIX_ox < 0.5:
-            ax.text(pH[index_III_ox_IV-50], 0.9, pZn_string, color='k', rotation = 90)     # Adding pZn value to equilibrium between Zn(OH)2 and Zn(OH)3^-
-        elif pHX - pHIX_ox >= 0.5:
-            ax.text(pH[index_III_ox_IV+15], 0.9, pZn_string, color='k', rotation = 90)     # Adding pZn value to equilibrium between Zn(OH)2 and Zn(OH)3^-
+        # if pHX - pHIX_ox < 0.5:
+        #     ax.text(pH[index_III_ox_IV-50], 0.9, pZn_string, color='k', rotation = 90)     # Adding pZn value to equilibrium between Zn(OH)2 and Zn(OH)3^-
+        # elif pHX - pHIX_ox >= 0.5:
+        #     ax.text(pH[index_III_ox_IV+15], 0.9, pZn_string, color='k', rotation = 90)     # Adding pZn value to equilibrium between Zn(OH)2 and Zn(OH)3^-
         
         # Adding text to different domains
 
