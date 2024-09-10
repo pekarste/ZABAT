@@ -470,7 +470,7 @@ def PourbaixDiagram(pZn, temperature):
     
     st.write('**Passivating effects**')  
     st.write(r'At this temperature, ZnO will be passivating as long as pZn $\leqslant %.2f$' %pZn_threshold_pass)
-    st.write(r'After that, the dominating species will be Zn(OH)$_{2}$(aq), and we will not have any passivating effects')
+    st.write(r'After that, the dominating species will be Zn(OH)$_{2}$(aq), and there will not be any passivating effects')
 
     st.write('**Suppressed domain**')
     st.write(r'At this tempertaure, the formation of Zn(OH)$_{3}^{-}$(aq) is supressed until pZn $< %.2f$ . ' %pZn_threshold_ox)
